@@ -1,0 +1,616 @@
+{
+ "pack": "insurance",
+ "hidden_truth": {
+  "history": {
+   "seed": 500,
+   "hours": 960.0,
+   "arrivals": 3517,
+   "events": 14529
+  },
+  "mechanisms": {
+   "mechanisms": {
+    "handoff_delay_hours": 0.2,
+    "absenteeism_probability": 0.08,
+    "shift_hours": 8.0
+   },
+   "hourly_profile": [
+    0.3,
+    0.2,
+    0.2,
+    0.2,
+    0.3,
+    0.5,
+    0.8,
+    1.2,
+    1.7,
+    1.9,
+    1.8,
+    1.6,
+    1.4,
+    1.5,
+    1.6,
+    1.5,
+    1.3,
+    1.1,
+    0.9,
+    0.8,
+    0.7,
+    0.6,
+    0.5,
+    0.4
+   ],
+   "note": "Truth adds 0.2h handoff delays, 8% per-shift absenteeism and a daily peak."
+  },
+  "calibration": [
+   {
+    "name": "arrival_rate[standard_claim]",
+    "estimate": 3.033333333333333,
+    "ci95_low": 2.9231589765669383,
+    "ci95_high": 3.143507690099728,
+    "n": 2912
+   },
+   {
+    "name": "arrival_rate[complex_claim]",
+    "estimate": 0.6302083333333334,
+    "ci95_low": 0.5799899733386505,
+    "ci95_high": 0.6804266933280162,
+    "n": 605
+   },
+   {
+    "name": "service_mean[intake]",
+    "estimate": 0.25241331270703454,
+    "ci95_low": 0.24888635000331633,
+    "ci95_high": 0.2561280149328022,
+    "n": 605
+   },
+   {
+    "name": "service_mean[triage]",
+    "estimate": 0.5018143736662315,
+    "ci95_low": 0.4930776597736909,
+    "ci95_high": 0.5128385581004321,
+    "n": 605
+   },
+   {
+    "name": "service_mean[assessment]",
+    "estimate": 1.1697687830353216,
+    "ci95_low": 1.1412738843364831,
+    "ci95_high": 1.2051408648621753,
+    "n": 605
+   },
+   {
+    "name": "branch[assessment#1]",
+    "estimate": 0.9186320754716981,
+    "ci95_low": null,
+    "ci95_high": null,
+    "n": 3392
+   },
+   {
+    "name": "service_mean[fraud_check]",
+    "estimate": 0.7851516814220074,
+    "ci95_low": 0.7269378664120346,
+    "ci95_high": 0.8666911926438453,
+    "n": 605
+   },
+   {
+    "name": "service_mean[senior_approval]",
+    "estimate": 0.44884172854906484,
+    "ci95_low": 0.4220423579906285,
+    "ci95_high": 0.4720668406408472,
+    "n": 605
+   },
+   {
+    "name": "service_mean[settlement]",
+    "estimate": 0.04999999999998293,
+    "ci95_low": 0.04999999999998206,
+    "ci95_high": 0.04999999999998396,
+    "n": 605
+   }
+  ],
+  "uncalibrated": [
+   "triage.automated",
+   "manual_review.manual (too few observations)"
+  ],
+  "diagnostics": [
+   {
+    "name": "mean_handoff_gap_hours",
+    "statistic": 0.20000000000001705,
+    "threshold": 1e-06,
+    "flagged": true,
+    "meaning": "The twin assumes zero time between steps; a positive gap means unmodelled handoff delay."
+   },
+   {
+    "name": "idle_capacity_while_queued",
+    "statistic": 0.6294964028776978,
+    "threshold": 0.05,
+    "flagged": true,
+    "meaning": "Share of time work waited although fewer than the nominal servers were busy (worst resource: senior_approver); suggests effective capacity below nominal."
+   },
+   {
+    "name": "peak_to_trough_hourly_arrivals",
+    "statistic": 11.11111111111111,
+    "threshold": 2.0,
+    "flagged": true,
+    "meaning": "Ratio of busiest to quietest hour-of-day arrival rate (mean 3.66/h); the twin assumes a constant rate."
+   }
+  ],
+  "baseline_fit_normal": {
+   "cycle_median_hours": {
+    "truth": 14.63829839561367,
+    "twin": 5.079070976693064,
+    "relative_error": -0.6530285939371892
+   },
+   "cycle_p95_hours": {
+    "truth": 23.026396275213173,
+    "twin": 9.091065049502074,
+    "relative_error": -0.6051894121492135
+   },
+   "completion_rate": {
+    "truth": 0.9510944553377442,
+    "twin": 0.9823488519470794,
+    "relative_error": 0.03286150648227308
+   },
+   "sla_attainment": {
+    "truth": 0.8061989394041658,
+    "twin": 0.9821141101630418,
+    "relative_error": 0.21820317810004689
+   },
+   "objective_cost_per_case": {
+    "truth": 193.44618888342637,
+    "twin": 179.66654219541695,
+    "relative_error": -0.07123245367378753
+   }
+  },
+  "alternatives": [
+   {
+    "name": "baseline",
+    "label": "baseline"
+   },
+   {
+    "name": "alt-2-8-1-manual-fifo",
+    "label": "capacity:adjuster=8"
+   },
+   {
+    "name": "alt-1-6-2-manual-fifo",
+    "label": "capacity:triage_officer=1, capacity:fraud_analyst=2"
+   },
+   {
+    "name": "alt-2-8-1-automated-fifo",
+    "label": "capacity:adjuster=8, variant:triage=automated"
+   },
+   {
+    "name": "alt-3-6-1-manual-high_value_first",
+    "label": "capacity:triage_officer=3, priority:queue_policy=high_value_first"
+   },
+   {
+    "name": "alt-1-5-1-manual-high_value_first",
+    "label": "capacity:triage_officer=1, capacity:adjuster=5, priority:queue_policy=high_value_first"
+   },
+   {
+    "name": "alt-1-7-2-manual-fifo",
+    "label": "capacity:triage_officer=1, capacity:adjuster=7, capacity:fraud_analyst=2"
+   },
+   {
+    "name": "alt-2-5-2-automated-fifo",
+    "label": "capacity:adjuster=5, capacity:fraud_analyst=2, variant:triage=automated"
+   },
+   {
+    "name": "alt-2-6-2-automated-high_value_first",
+    "label": "capacity:fraud_analyst=2, variant:triage=automated, priority:queue_policy=high_value_first"
+   },
+   {
+    "name": "alt-2-7-2-automated-fifo",
+    "label": "capacity:adjuster=7, capacity:fraud_analyst=2, variant:triage=automated"
+   },
+   {
+    "name": "alt-2-8-1-automated-high_value_first",
+    "label": "capacity:adjuster=8, variant:triage=automated, priority:queue_policy=high_value_first"
+   },
+   {
+    "name": "alt-2-7-2-automated-high_value_first",
+    "label": "capacity:adjuster=7, capacity:fraud_analyst=2, variant:triage=automated, priority:queue_policy=high_value_first"
+   }
+  ],
+  "validation_seeds": [
+   7000,
+   7001,
+   7002,
+   7003,
+   7004,
+   7005,
+   7006,
+   7007
+  ],
+  "conditions": {
+   "normal": {
+    "kendall_tau": {
+     "capacity_aware_twin": 0.909090909090909,
+     "uncapacitated_sim": 0.5846845821518305,
+     "spreadsheet": 0.5846845821518305
+    },
+    "objective_mape": {
+     "capacity_aware_twin": 0.04791367599093881,
+     "uncapacitated_sim": 0.09170569794709528,
+     "spreadsheet": 0.08984752994342023
+    },
+    "choices": {
+     "capacity_aware_twin": {
+      "choice": "baseline",
+      "truth_best": "alt-2-6-2-automated-high_value_first",
+      "regret": null,
+      "choice_feasible_in_truth": false
+     },
+     "uncapacitated_sim": {
+      "choice": "alt-1-5-1-manual-high_value_first",
+      "truth_best": "alt-2-6-2-automated-high_value_first",
+      "regret": null,
+      "choice_feasible_in_truth": false
+     },
+     "spreadsheet": {
+      "choice": "baseline",
+      "truth_best": "alt-2-6-2-automated-high_value_first",
+      "regret": null,
+      "choice_feasible_in_truth": false
+     }
+    },
+    "truth_feasible": [
+     "alt-2-6-2-automated-high_value_first",
+     "alt-2-7-2-automated-fifo",
+     "alt-2-7-2-automated-high_value_first",
+     "alt-2-8-1-automated-fifo",
+     "alt-2-8-1-automated-high_value_first",
+     "alt-3-6-1-manual-high_value_first"
+    ],
+    "spreadsheet_feasible": [
+     "alt-2-6-2-automated-high_value_first",
+     "alt-2-7-2-automated-fifo",
+     "alt-2-7-2-automated-high_value_first",
+     "alt-2-8-1-automated-fifo",
+     "alt-2-8-1-automated-high_value_first",
+     "alt-2-8-1-manual-fifo",
+     "alt-3-6-1-manual-high_value_first",
+     "baseline"
+    ],
+    "objective_means": {
+     "truth": {
+      "baseline": 193.44618888342637,
+      "alt-2-8-1-manual-fifo": 224.17654546708792,
+      "alt-1-6-2-manual-fifo": 232.37640231156945,
+      "alt-2-8-1-automated-fifo": 198.02480953418274,
+      "alt-3-6-1-manual-high_value_first": 197.55687318616327,
+      "alt-1-5-1-manual-high_value_first": 194.32138356994108,
+      "alt-1-7-2-manual-fifo": 247.9162046563245,
+      "alt-2-5-2-automated-fifo": 193.54177027881028,
+      "alt-2-6-2-automated-high_value_first": 186.99764643380982,
+      "alt-2-7-2-automated-fifo": 202.27413325436018,
+      "alt-2-8-1-automated-high_value_first": 198.02131119984227,
+      "alt-2-7-2-automated-high_value_first": 202.2686880442761
+     },
+     "capacity_aware_twin": {
+      "baseline": 179.66654219541695,
+      "alt-2-8-1-manual-fifo": 209.54383399634978,
+      "alt-1-6-2-manual-fifo": 225.31635534844204,
+      "alt-2-8-1-automated-fifo": 190.66819561238532,
+      "alt-3-6-1-manual-high_value_first": 190.20350925232273,
+      "alt-1-5-1-manual-high_value_first": 188.25378492083158,
+      "alt-1-7-2-manual-fifo": 240.27152938876264,
+      "alt-2-5-2-automated-fifo": 169.95446494344506,
+      "alt-2-6-2-automated-high_value_first": 179.84383124957887,
+      "alt-2-7-2-automated-fifo": 194.74927702142517,
+      "alt-2-8-1-automated-high_value_first": 190.66745558375794,
+      "alt-2-7-2-automated-high_value_first": 194.74858941213628
+     },
+     "uncapacitated_sim": {
+      "baseline": 179.29553409546998,
+      "alt-2-8-1-manual-fifo": 209.20588217611117,
+      "alt-1-6-2-manual-fifo": 187.45290175382667,
+      "alt-2-8-1-automated-fifo": 190.652435268183,
+      "alt-3-6-1-manual-high_value_first": 190.17202430661223,
+      "alt-1-5-1-manual-high_value_first": 153.4638698440071,
+      "alt-1-7-2-manual-fifo": 202.40807579414724,
+      "alt-2-5-2-automated-fifo": 164.8207710167202,
+      "alt-2-6-2-automated-high_value_first": 179.77594505704076,
+      "alt-2-7-2-automated-fifo": 194.73111909736136,
+      "alt-2-8-1-automated-high_value_first": 190.652435268183,
+      "alt-2-7-2-automated-high_value_first": 194.73111909736136
+     },
+     "spreadsheet": {
+      "baseline": 179.60717325113626,
+      "alt-2-8-1-manual-fifo": 209.63276324260627,
+      "alt-1-6-2-manual-fifo": 187.79597052153719,
+      "alt-2-8-1-automated-fifo": 191.09148942969756,
+      "alt-3-6-1-manual-high_value_first": 190.52556961167082,
+      "alt-1-5-1-manual-high_value_first": 153.67598189486674,
+      "alt-1-7-2-manual-fifo": 202.80876551727218,
+      "alt-2-5-2-automated-fifo": 165.160298073428,
+      "alt-2-6-2-automated-high_value_first": 180.173093069163,
+      "alt-2-7-2-automated-fifo": 195.185888064898,
+      "alt-2-8-1-automated-high_value_first": 191.09148942969756,
+      "alt-2-7-2-automated-high_value_first": 195.185888064898
+     }
+    }
+   },
+   "surge_25": {
+    "kendall_tau": {
+     "capacity_aware_twin": 0.6666666666666666,
+     "uncapacitated_sim": 0.1538643637241659,
+     "spreadsheet": 0.1538643637241659
+    },
+    "objective_mape": {
+     "capacity_aware_twin": 0.05460787737405568,
+     "uncapacitated_sim": 0.14731393193015427,
+     "spreadsheet": 0.15000879833573177
+    },
+    "choices": {
+     "capacity_aware_twin": {
+      "choice": "alt-2-8-1-automated-high_value_first",
+      "truth_best": "alt-2-8-1-automated-high_value_first",
+      "regret": 0.0,
+      "choice_feasible_in_truth": true
+     },
+     "uncapacitated_sim": {
+      "choice": "alt-1-5-1-manual-high_value_first",
+      "truth_best": "alt-2-8-1-automated-high_value_first",
+      "regret": null,
+      "choice_feasible_in_truth": false
+     },
+     "spreadsheet": {
+      "choice": "alt-3-6-1-manual-high_value_first",
+      "truth_best": "alt-2-8-1-automated-high_value_first",
+      "regret": null,
+      "choice_feasible_in_truth": false
+     }
+    },
+    "truth_feasible": [
+     "alt-2-7-2-automated-fifo",
+     "alt-2-7-2-automated-high_value_first",
+     "alt-2-8-1-automated-fifo",
+     "alt-2-8-1-automated-high_value_first"
+    ],
+    "spreadsheet_feasible": [
+     "alt-2-7-2-automated-fifo",
+     "alt-2-7-2-automated-high_value_first",
+     "alt-2-8-1-automated-fifo",
+     "alt-2-8-1-automated-high_value_first",
+     "alt-3-6-1-manual-high_value_first"
+    ],
+    "objective_means": {
+     "truth": {
+      "baseline": 185.2202480723614,
+      "alt-2-8-1-manual-fifo": 208.94814063976202,
+      "alt-1-6-2-manual-fifo": 193.99141119059345,
+      "alt-2-8-1-automated-fifo": 159.6872898230496,
+      "alt-3-6-1-manual-high_value_first": 171.38608847907426,
+      "alt-1-5-1-manual-high_value_first": 163.13492272560214,
+      "alt-1-7-2-manual-fifo": 206.42217901118562,
+      "alt-2-5-2-automated-fifo": 174.37898244364192,
+      "alt-2-6-2-automated-high_value_first": 177.0033722460608,
+      "alt-2-7-2-automated-fifo": 166.7631335035832,
+      "alt-2-8-1-automated-high_value_first": 159.6687113908796,
+      "alt-2-7-2-automated-high_value_first": 166.9341053740347
+     },
+     "capacity_aware_twin": {
+      "baseline": 171.61788484032266,
+      "alt-2-8-1-manual-fifo": 195.34862616697234,
+      "alt-1-6-2-manual-fifo": 189.08576290950577,
+      "alt-2-8-1-automated-fifo": 154.2752146089266,
+      "alt-3-6-1-manual-high_value_first": 154.8429439453223,
+      "alt-1-5-1-manual-high_value_first": 158.75834734257302,
+      "alt-1-7-2-manual-fifo": 201.10916487694277,
+      "alt-2-5-2-automated-fifo": 166.5703300676825,
+      "alt-2-6-2-automated-high_value_first": 155.77750940992942,
+      "alt-2-7-2-automated-fifo": 157.67215151462466,
+      "alt-2-8-1-automated-high_value_first": 154.2746496003211,
+      "alt-2-7-2-automated-high_value_first": 157.6686827311172
+     },
+     "uncapacitated_sim": {
+      "baseline": 145.08185441273656,
+      "alt-2-8-1-manual-fifo": 169.12865834761055,
+      "alt-1-6-2-manual-fifo": 151.64007366770218,
+      "alt-2-8-1-automated-fifo": 154.18227519457105,
+      "alt-3-6-1-manual-high_value_first": 153.82614675269073,
+      "alt-1-5-1-manual-high_value_first": 124.31416010534538,
+      "alt-1-7-2-manual-fifo": 163.66347563513918,
+      "alt-2-5-2-automated-fifo": 133.41458088717988,
+      "alt-2-6-2-automated-high_value_first": 145.43798285461688,
+      "alt-2-7-2-automated-fifo": 157.46138482205387,
+      "alt-2-8-1-automated-high_value_first": 154.18227519457105,
+      "alt-2-7-2-automated-high_value_first": 157.46138482205387
+     },
+     "spreadsheet": {
+      "baseline": 144.5591209338204,
+      "alt-2-8-1-manual-fifo": 168.5795929269964,
+      "alt-1-6-2-manual-fifo": 151.11015875014112,
+      "alt-2-8-1-automated-fifo": 153.75057387666942,
+      "alt-3-6-1-manual-high_value_first": 153.29383802224802,
+      "alt-1-5-1-manual-high_value_first": 123.81416784880476,
+      "alt-1-7-2-manual-fifo": 163.12039474672912,
+      "alt-2-5-2-automated-fifo": 133.00562079165377,
+      "alt-2-6-2-automated-high_value_first": 145.01585678824176,
+      "alt-2-7-2-automated-fifo": 157.02609278482979,
+      "alt-2-8-1-automated-high_value_first": 153.75057387666942,
+      "alt-2-7-2-automated-high_value_first": 157.02609278482979
+     }
+    }
+   }
+  },
+  "h1_supported": true
+ },
+ "selection": {
+  "alternatives": [
+   "alt-2-6-1-automated-fifo",
+   "alt-2-6-1-automated-high_value_first",
+   "alt-2-5-1-manual-fifo",
+   "alt-2-5-1-manual-high_value_first",
+   "alt-3-5-1-manual-fifo",
+   "alt-3-5-1-manual-high_value_first",
+   "alt-2-7-1-automated-fifo",
+   "alt-2-7-1-automated-high_value_first",
+   "alt-2-6-1-manual-high_value_first",
+   "baseline"
+  ],
+  "long_run_means": {
+   "alt-2-6-1-automated-fifo": 163.74870739640193,
+   "alt-2-6-1-automated-high_value_first": 163.74869389939735,
+   "alt-2-5-1-manual-fifo": 167.75724217567944,
+   "alt-2-5-1-manual-high_value_first": 167.76701582151094,
+   "alt-3-5-1-manual-fifo": 178.71884101560988,
+   "alt-3-5-1-manual-high_value_first": 178.72717198095307,
+   "alt-2-7-1-automated-fifo": 178.88492979448296,
+   "alt-2-7-1-automated-high_value_first": 178.88531638620643,
+   "alt-2-6-1-manual-high_value_first": 182.75809241577582,
+   "baseline": 182.75882689918367
+  },
+  "long_run_se": {
+   "alt-2-6-1-automated-fifo": 0.696283153741213,
+   "alt-2-6-1-automated-high_value_first": 0.6965244561226929,
+   "alt-2-5-1-manual-fifo": 0.6892243406976237,
+   "alt-2-5-1-manual-high_value_first": 0.6885098005417405,
+   "alt-3-5-1-manual-fifo": 0.7414952382338768,
+   "alt-3-5-1-manual-high_value_first": 0.7393325486991104,
+   "alt-2-7-1-automated-fifo": 0.7700726255009038,
+   "alt-2-7-1-automated-high_value_first": 0.7697839973469597,
+   "alt-2-6-1-manual-high_value_first": 0.7676008019455532,
+   "baseline": 0.7673976907476792
+  },
+  "gap_best_to_second": 1.3497004573537197e-05,
+  "within_indifference_zone": 2,
+  "pool_size": 40,
+  "long_run_reps": 60,
+  "macro": 400,
+  "delta_iz": 1.0,
+  "rows": [
+   {
+    "budget": 50,
+    "pcs_equal": 0.9525,
+    "se_equal": 0.010635289135702893,
+    "pcs_ocba": 0.9525,
+    "se_ocba": 0.010635289135702893
+   },
+   {
+    "budget": 100,
+    "pcs_equal": 0.9975,
+    "se_equal": 0.002496873044429746,
+    "pcs_ocba": 0.9975,
+    "se_ocba": 0.002496873044429746
+   },
+   {
+    "budget": 150,
+    "pcs_equal": 1.0,
+    "se_equal": 0.0,
+    "pcs_ocba": 1.0,
+    "se_ocba": 0.0
+   },
+   {
+    "budget": 200,
+    "pcs_equal": 1.0,
+    "se_equal": 0.0,
+    "pcs_ocba": 1.0,
+    "se_ocba": 0.0
+   }
+  ],
+  "h2_supported": false
+ },
+ "robust": {
+  "worlds": 12,
+  "seeds_per_world": 4,
+  "regret": {
+   "baseline": {
+    "max_regret": 13.29205280452669,
+    "mean_regret": 10.840937714788689,
+    "feasible_share": 1.0
+   },
+   "alt-2-8-1-manual-fifo": {
+    "max_regret": 43.846317859628726,
+    "mean_regret": 41.40859243526336,
+    "feasible_share": 1.0
+   },
+   "alt-1-6-2-manual-fifo": {
+    "max_regret": 59.49467395271003,
+    "mean_regret": 56.96584985360159,
+    "feasible_share": 0.0
+   },
+   "alt-2-8-1-automated-fifo": {
+    "max_regret": 24.796068622202228,
+    "mean_regret": 22.304818374312074,
+    "feasible_share": 1.0
+   },
+   "alt-3-6-1-manual-high_value_first": {
+    "max_regret": 24.28325471400359,
+    "mean_regret": 21.807151506752962,
+    "feasible_share": 1.0
+   },
+   "alt-1-5-1-manual-high_value_first": {
+    "max_regret": 21.613705344999772,
+    "mean_regret": 18.910011615212497,
+    "feasible_share": 0.0
+   },
+   "alt-1-7-2-manual-fifo": {
+    "max_regret": 74.77180648026103,
+    "mean_regret": 72.25964142445928,
+    "feasible_share": 0.0
+   },
+   "alt-2-5-2-automated-fifo": {
+    "max_regret": 0.0,
+    "mean_regret": -0.7907929744128998,
+    "feasible_share": 0.9166666666666666
+   },
+   "alt-2-6-2-automated-high_value_first": {
+    "max_regret": 13.696735900536737,
+    "mean_regret": 11.228793281896245,
+    "feasible_share": 1.0
+   },
+   "alt-2-7-2-automated-fifo": {
+    "max_regret": 28.963064872707236,
+    "mean_regret": 26.480237673004183,
+    "feasible_share": 1.0
+   },
+   "alt-2-8-1-automated-high_value_first": {
+    "max_regret": 24.796068622202228,
+    "mean_regret": 22.30488617510103,
+    "feasible_share": 1.0
+   },
+   "alt-2-7-2-automated-high_value_first": {
+    "max_regret": 28.963064872707236,
+    "mean_regret": 26.481213175916093,
+    "feasible_share": 1.0
+   }
+  },
+  "p_dominates_baseline": {
+   "baseline": 0.0,
+   "alt-2-8-1-manual-fifo": 0.0,
+   "alt-1-6-2-manual-fifo": 0.0,
+   "alt-2-8-1-automated-fifo": 0.0,
+   "alt-3-6-1-manual-high_value_first": 0.0,
+   "alt-1-5-1-manual-high_value_first": 0.0,
+   "alt-1-7-2-manual-fifo": 0.0,
+   "alt-2-5-2-automated-fifo": 0.9166666666666666,
+   "alt-2-6-2-automated-high_value_first": 0.0,
+   "alt-2-7-2-automated-fifo": 0.0,
+   "alt-2-8-1-automated-high_value_first": 0.0,
+   "alt-2-7-2-automated-high_value_first": 0.0
+  },
+  "point_choice": "baseline",
+  "robust_choice": "alt-2-5-2-automated-fifo",
+  "fragile_point_choice": false,
+  "truth_surge": {
+   "point": {
+    "choice": "baseline",
+    "truth_best": "alt-2-8-1-automated-high_value_first",
+    "regret": null,
+    "choice_feasible_in_truth": false
+   },
+   "robust": {
+    "choice": "alt-2-5-2-automated-fifo",
+    "truth_best": "alt-2-8-1-automated-high_value_first",
+    "regret": null,
+    "choice_feasible_in_truth": false
+   },
+   "point_objective": 185.2202480723614,
+   "robust_objective": 174.37898244364192
+  },
+  "h3_supported": true,
+  "h3_basis": "neither choice meets the decision rule in truth; compared on truth objective only"
+ },
+ "runtime_seconds": 78.6,
+ "ledger_record": "experiment-d0a1302cb9ca"
+}

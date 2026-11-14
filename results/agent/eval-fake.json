@@ -1,0 +1,2576 @@
+{
+ "proposer": "scripted-fake-v1",
+ "proposer_kind": "scripted",
+ "dataset_version": "requests-v1",
+ "n": 36,
+ "correct": 35,
+ "by_split": {
+  "dev": {
+   "n": 18,
+   "correct": 18
+  },
+  "heldout": {
+   "n": 18,
+   "correct": 17
+  }
+ },
+ "by_category": {
+  "normal": {
+   "n": 15,
+   "correct": 14
+  },
+  "missing": {
+   "n": 6,
+   "correct": 6
+  },
+  "control": {
+   "n": 6,
+   "correct": 6
+  },
+  "out_of_scope": {
+   "n": 4,
+   "correct": 4
+  },
+  "contradictory": {
+   "n": 2,
+   "correct": 2
+  },
+  "out_of_bounds": {
+   "n": 2,
+   "correct": 2
+  },
+  "over_budget": {
+   "n": 1,
+   "correct": 1
+  }
+ },
+ "control_requests": 6,
+ "control_requests_runnable": 0,
+ "invalid_outputs": 0,
+ "provider_errors": 0,
+ "total_input_tokens": null,
+ "total_output_tokens": null,
+ "total_estimated_cost_usd": null,
+ "results": [
+  {
+   "id": "ins-d1",
+   "pack": "insurance",
+   "split": "dev",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Add 1 adjuster under normal demand.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:capacity:adjuster=7",
+     "changes": [
+      {
+       "lever": "capacity:adjuster",
+       "value": 7
+      }
+     ]
+    },
+    "demand_condition": "normal",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:adjuster\", \"value\": 7}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:adjuster",
+         "value": 7
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:capacity:adjuster=7",
+        "changes": [
+         {
+          "lever": "capacity:adjuster",
+          "value": 7
+         }
+        ]
+       },
+       "demand_condition": "normal",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-d2",
+   "pack": "insurance",
+   "split": "dev",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Automate triage and keep current staffing, under the surge scenario.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:variant:triage=automated",
+     "changes": [
+      {
+       "lever": "variant:triage",
+       "value": "automated"
+      }
+     ]
+    },
+    "demand_condition": "surge_25",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"variant:triage\", \"value\": \"automated\"}], \"demand_condition\": \"surge_25\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "variant:triage",
+         "value": "automated"
+        }
+       ],
+       "demand_condition": "surge_25",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:variant:triage=automated",
+        "changes": [
+         {
+          "lever": "variant:triage",
+          "value": "automated"
+         }
+        ]
+       },
+       "demand_condition": "surge_25",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-d3",
+   "pack": "insurance",
+   "split": "dev",
+   "category": "missing",
+   "expected_status": "needs_input",
+   "actual_status": "needs_input",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "What happens if we hire some more adjusters during a surge?",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "needs_input",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [
+     "How many adjusters should the scenario use?",
+     "What value should 'capacity:adjuster' take?"
+    ],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:adjuster\", \"value\": null}], \"demand_condition\": \"surge_25\", \"unknowns\": [\"How many adjusters should the scenario use?\"], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:adjuster",
+         "value": null
+        }
+       ],
+       "demand_condition": "surge_25",
+       "unknowns": [
+        "How many adjusters should the scenario use?"
+       ],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "needs_input",
+       "issues": [],
+       "questions": [
+        "How many adjusters should the scenario use?",
+        "What value should 'capacity:adjuster' take?"
+       ],
+       "change_set": null,
+       "demand_condition": "surge_25",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-d4",
+   "pack": "insurance",
+   "split": "dev",
+   "category": "control",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "control_locked",
+   "actual_codes": [
+    "control_locked"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Skip the fraud check for claims to speed things up, normal demand.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "control_locked",
+      "path": "changes.remove_control:fraud-review-high-value",
+      "message": "mandatory controls cannot be removed, bypassed or changed"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"remove_control:fraud-review-high-value\", \"value\": \"removed\"}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "remove_control:fraud-review-high-value",
+         "value": "removed"
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "control_locked",
+         "path": "changes.remove_control:fraud-review-high-value",
+         "message": "mandatory controls cannot be removed, bypassed or changed"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-d5",
+   "pack": "insurance",
+   "split": "dev",
+   "category": "out_of_scope",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "out_of_scope",
+   "actual_codes": [
+    "out_of_scope"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Deploy the automated triage to production.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "out_of_scope",
+      "path": "request",
+      "message": "request is not a what-if over this pack's permitted levers (the prototype never changes live systems)"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": false, \"changes\": [{\"lever\": \"variant:triage\", \"value\": \"automated\"}], \"demand_condition\": null, \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": false,
+       "changes": [
+        {
+         "lever": "variant:triage",
+         "value": "automated"
+        }
+       ],
+       "demand_condition": null,
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "out_of_scope",
+         "path": "request",
+         "message": "request is not a what-if over this pack's permitted levers (the prototype never changes live systems)"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-d6",
+   "pack": "insurance",
+   "split": "dev",
+   "category": "contradictory",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "contradiction",
+   "actual_codes": [
+    "contradiction"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Add 1 adjuster and cut 1 adjuster under normal demand.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "contradiction",
+      "path": "changes.capacity:adjuster",
+      "message": "conflicting values 7 and 5"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:adjuster\", \"value\": 7}, {\"lever\": \"capacity:adjuster\", \"value\": 5}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:adjuster",
+         "value": 7
+        },
+        {
+         "lever": "capacity:adjuster",
+         "value": 5
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "contradiction",
+         "path": "changes.capacity:adjuster",
+         "message": "conflicting values 7 and 5"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-h1",
+   "pack": "insurance",
+   "split": "heldout",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Prioritise high-value claims first with 7 adjusters, current demand.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:capacity:adjuster=7, priority:queue_policy=high_value_first",
+     "changes": [
+      {
+       "lever": "capacity:adjuster",
+       "value": 7
+      },
+      {
+       "lever": "priority:queue_policy",
+       "value": "high_value_first"
+      }
+     ]
+    },
+    "demand_condition": "normal",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:adjuster\", \"value\": 7}, {\"lever\": \"priority:queue_policy\", \"value\": \"high_value_first\"}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:adjuster",
+         "value": 7
+        },
+        {
+         "lever": "priority:queue_policy",
+         "value": "high_value_first"
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:capacity:adjuster=7, priority:queue_policy=high_value_first",
+        "changes": [
+         {
+          "lever": "capacity:adjuster",
+          "value": 7
+         },
+         {
+          "lever": "priority:queue_policy",
+          "value": "high_value_first"
+         }
+        ]
+       },
+       "demand_condition": "normal",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-h2",
+   "pack": "insurance",
+   "split": "heldout",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Use the triage model and set triage officers to 1 for the complex mix.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:capacity:triage_officer=1, variant:triage=automated",
+     "changes": [
+      {
+       "lever": "capacity:triage_officer",
+       "value": 1
+      },
+      {
+       "lever": "variant:triage",
+       "value": "automated"
+      }
+     ]
+    },
+    "demand_condition": "complex_mix",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:triage_officer\", \"value\": 1}, {\"lever\": \"variant:triage\", \"value\": \"automated\"}], \"demand_condition\": \"complex_mix\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:triage_officer",
+         "value": 1
+        },
+        {
+         "lever": "variant:triage",
+         "value": "automated"
+        }
+       ],
+       "demand_condition": "complex_mix",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:capacity:triage_officer=1, variant:triage=automated",
+        "changes": [
+         {
+          "lever": "capacity:triage_officer",
+          "value": 1
+         },
+         {
+          "lever": "variant:triage",
+          "value": "automated"
+         }
+        ]
+       },
+       "demand_condition": "complex_mix",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-h3",
+   "pack": "insurance",
+   "split": "heldout",
+   "category": "out_of_bounds",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "out_of_bounds",
+   "actual_codes": [
+    "out_of_bounds"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Move to 12 adjusters under normal demand.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "out_of_bounds",
+      "path": "changes.capacity:adjuster",
+      "message": "12 outside permitted 5..8 (step 1)"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:adjuster\", \"value\": 12}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:adjuster",
+         "value": 12
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "out_of_bounds",
+         "path": "changes.capacity:adjuster",
+         "message": "12 outside permitted 5..8 (step 1)"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": true
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     },
+     {
+      "index": 1,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:adjuster\", \"value\": 12}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:adjuster",
+         "value": 12
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "out_of_bounds",
+         "path": "changes.capacity:adjuster",
+         "message": "12 outside permitted 5..8 (step 1)"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": true
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-h4",
+   "pack": "insurance",
+   "split": "heldout",
+   "category": "control",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "control_locked",
+   "actual_codes": [
+    "control_locked"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Remove senior approval for high-value claims during peak demand.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "control_locked",
+      "path": "changes.remove_control:senior-approval-high-value",
+      "message": "mandatory controls cannot be removed, bypassed or changed"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"remove_control:senior-approval-high-value\", \"value\": \"removed\"}], \"demand_condition\": \"surge_25\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "remove_control:senior-approval-high-value",
+         "value": "removed"
+        }
+       ],
+       "demand_condition": "surge_25",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "control_locked",
+         "path": "changes.remove_control:senior-approval-high-value",
+         "message": "mandatory controls cannot be removed, bypassed or changed"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-h5",
+   "pack": "insurance",
+   "split": "heldout",
+   "category": "missing",
+   "expected_status": "needs_input",
+   "actual_status": "needs_input",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Add one more fraud analyst.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "needs_input",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [
+     "Which demand condition should be simulated? Options: complex_mix, normal, surge_25."
+    ],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:fraud_analyst\", \"value\": 2}], \"demand_condition\": null, \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:fraud_analyst",
+         "value": 2
+        }
+       ],
+       "demand_condition": null,
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "needs_input",
+       "issues": [],
+       "questions": [
+        "Which demand condition should be simulated? Options: complex_mix, normal, surge_25."
+       ],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "ins-h6",
+   "pack": "insurance",
+   "split": "heldout",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Simulate the current operation as-is under the surge.",
+    "pack_id": "insurance",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:baseline",
+     "changes": []
+    },
+    "demand_condition": "surge_25",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [], \"demand_condition\": \"surge_25\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "insurance",
+       "in_scope": true,
+       "changes": [],
+       "demand_condition": "surge_25",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:baseline",
+        "changes": []
+       },
+       "demand_condition": "surge_25",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-d1",
+   "pack": "procurement",
+   "split": "dev",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Hire 1 buyer under normal demand.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:capacity:buyer=4",
+     "changes": [
+      {
+       "lever": "capacity:buyer",
+       "value": 4
+      }
+     ]
+    },
+    "demand_condition": "normal",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:buyer\", \"value\": 4}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:buyer",
+         "value": 4
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:capacity:buyer=4",
+        "changes": [
+         {
+          "lever": "capacity:buyer",
+          "value": 4
+         }
+        ]
+       },
+       "demand_condition": "normal",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-d2",
+   "pack": "procurement",
+   "split": "dev",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Switch to ML-assisted classification during a surge.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:variant:classify=ml_assisted",
+     "changes": [
+      {
+       "lever": "variant:classify",
+       "value": "ml_assisted"
+      }
+     ]
+    },
+    "demand_condition": "surge_25",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"variant:classify\", \"value\": \"ml_assisted\"}], \"demand_condition\": \"surge_25\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "variant:classify",
+         "value": "ml_assisted"
+        }
+       ],
+       "demand_condition": "surge_25",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:variant:classify=ml_assisted",
+        "changes": [
+         {
+          "lever": "variant:classify",
+          "value": "ml_assisted"
+         }
+        ]
+       },
+       "demand_condition": "surge_25",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-d3",
+   "pack": "procurement",
+   "split": "dev",
+   "category": "control",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "control_locked",
+   "actual_codes": [
+    "control_locked"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Bypass the three-way match for small invoices under normal demand.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "control_locked",
+      "path": "changes.remove_control:three-way-match",
+      "message": "mandatory controls cannot be removed, bypassed or changed"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"remove_control:three-way-match\", \"value\": \"removed\"}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "remove_control:three-way-match",
+         "value": "removed"
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "control_locked",
+         "path": "changes.remove_control:three-way-match",
+         "message": "mandatory controls cannot be removed, bypassed or changed"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-d4",
+   "pack": "procurement",
+   "split": "dev",
+   "category": "missing",
+   "expected_status": "needs_input",
+   "actual_status": "needs_input",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Add extra buyers for the receipt-heavy period.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "needs_input",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [
+     "How many buyers should the scenario use?",
+     "What value should 'capacity:buyer' take?"
+    ],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:buyer\", \"value\": null}], \"demand_condition\": \"receipt_heavy\", \"unknowns\": [\"How many buyers should the scenario use?\"], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:buyer",
+         "value": null
+        }
+       ],
+       "demand_condition": "receipt_heavy",
+       "unknowns": [
+        "How many buyers should the scenario use?"
+       ],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "needs_input",
+       "issues": [],
+       "questions": [
+        "How many buyers should the scenario use?",
+        "What value should 'capacity:buyer' take?"
+       ],
+       "change_set": null,
+       "demand_condition": "receipt_heavy",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-d5",
+   "pack": "procurement",
+   "split": "dev",
+   "category": "out_of_scope",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "out_of_scope",
+   "actual_codes": [
+    "out_of_scope"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Update the ERP vendor master with the new process.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "out_of_scope",
+      "path": "request",
+      "message": "request is not a what-if over this pack's permitted levers (the prototype never changes live systems)"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": false, \"changes\": [], \"demand_condition\": null, \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": false,
+       "changes": [],
+       "demand_condition": null,
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "out_of_scope",
+         "path": "request",
+         "message": "request is not a what-if over this pack's permitted levers (the prototype never changes live systems)"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-d6",
+   "pack": "procurement",
+   "split": "dev",
+   "category": "contradictory",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "contradiction",
+   "actual_codes": [
+    "contradiction"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Cut 1 AP clerk and add 1 AP clerk under current demand.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "contradiction",
+      "path": "changes.capacity:ap_clerk",
+      "message": "conflicting values 4 and 2"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:ap_clerk\", \"value\": 4}, {\"lever\": \"capacity:ap_clerk\", \"value\": 2}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:ap_clerk",
+         "value": 4
+        },
+        {
+         "lever": "capacity:ap_clerk",
+         "value": 2
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "contradiction",
+         "path": "changes.capacity:ap_clerk",
+         "message": "conflicting values 4 and 2"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-h1",
+   "pack": "procurement",
+   "split": "heldout",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Set buyers to 5 and receiving clerks to 2 under normal demand.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:capacity:buyer=5, capacity:receiving_clerk=2",
+     "changes": [
+      {
+       "lever": "capacity:buyer",
+       "value": 5
+      },
+      {
+       "lever": "capacity:receiving_clerk",
+       "value": 2
+      }
+     ]
+    },
+    "demand_condition": "normal",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:buyer\", \"value\": 5}, {\"lever\": \"capacity:receiving_clerk\", \"value\": 2}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:buyer",
+         "value": 5
+        },
+        {
+         "lever": "capacity:receiving_clerk",
+         "value": 2
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:capacity:buyer=5, capacity:receiving_clerk=2",
+        "changes": [
+         {
+          "lever": "capacity:buyer",
+          "value": 5
+         },
+         {
+          "lever": "capacity:receiving_clerk",
+          "value": 2
+         }
+        ]
+       },
+       "demand_condition": "normal",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-h2",
+   "pack": "procurement",
+   "split": "heldout",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Prioritise high-value invoices first with ML-assisted classification under the receipt-heavy mix.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:variant:classify=ml_assisted, priority:queue_policy=high_value_first",
+     "changes": [
+      {
+       "lever": "variant:classify",
+       "value": "ml_assisted"
+      },
+      {
+       "lever": "priority:queue_policy",
+       "value": "high_value_first"
+      }
+     ]
+    },
+    "demand_condition": "receipt_heavy",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"variant:classify\", \"value\": \"ml_assisted\"}, {\"lever\": \"priority:queue_policy\", \"value\": \"high_value_first\"}], \"demand_condition\": \"receipt_heavy\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "variant:classify",
+         "value": "ml_assisted"
+        },
+        {
+         "lever": "priority:queue_policy",
+         "value": "high_value_first"
+        }
+       ],
+       "demand_condition": "receipt_heavy",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:variant:classify=ml_assisted, priority:queue_policy=high_value_first",
+        "changes": [
+         {
+          "lever": "variant:classify",
+          "value": "ml_assisted"
+         },
+         {
+          "lever": "priority:queue_policy",
+          "value": "high_value_first"
+         }
+        ]
+       },
+       "demand_condition": "receipt_heavy",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-h3",
+   "pack": "procurement",
+   "split": "heldout",
+   "category": "control",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "control_locked",
+   "actual_codes": [
+    "control_locked"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Remove the segregation of duties approval during a surge.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "control_locked",
+      "path": "changes.remove_control:sod-high-value",
+      "message": "mandatory controls cannot be removed, bypassed or changed"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"remove_control:sod-high-value\", \"value\": \"removed\"}], \"demand_condition\": \"surge_25\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "remove_control:sod-high-value",
+         "value": "removed"
+        }
+       ],
+       "demand_condition": "surge_25",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "control_locked",
+         "path": "changes.remove_control:sod-high-value",
+         "message": "mandatory controls cannot be removed, bypassed or changed"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-h4",
+   "pack": "procurement",
+   "split": "heldout",
+   "category": "missing",
+   "expected_status": "needs_input",
+   "actual_status": "needs_input",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "What if we had more AP clerks?",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "needs_input",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [
+     "How many ap clerks should the scenario use?",
+     "What value should 'capacity:ap_clerk' take?",
+     "Which demand condition should be simulated? Options: normal, receipt_heavy, surge_25."
+    ],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:ap_clerk\", \"value\": null}], \"demand_condition\": null, \"unknowns\": [\"How many ap clerks should the scenario use?\"], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:ap_clerk",
+         "value": null
+        }
+       ],
+       "demand_condition": null,
+       "unknowns": [
+        "How many ap clerks should the scenario use?"
+       ],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "needs_input",
+       "issues": [],
+       "questions": [
+        "How many ap clerks should the scenario use?",
+        "What value should 'capacity:ap_clerk' take?",
+        "Which demand condition should be simulated? Options: normal, receipt_heavy, surge_25."
+       ],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-h5",
+   "pack": "procurement",
+   "split": "heldout",
+   "category": "out_of_bounds",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "out_of_bounds",
+   "actual_codes": [
+    "out_of_bounds"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Hire 3 buyers and 2 receiving clerks under normal demand.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "out_of_bounds",
+      "path": "changes.capacity:buyer",
+      "message": "6 outside permitted 3..5 (step 1)"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:buyer\", \"value\": 6}, {\"lever\": \"capacity:receiving_clerk\", \"value\": 2}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:buyer",
+         "value": 6
+        },
+        {
+         "lever": "capacity:receiving_clerk",
+         "value": 2
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "out_of_bounds",
+         "path": "changes.capacity:buyer",
+         "message": "6 outside permitted 3..5 (step 1)"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": true
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     },
+     {
+      "index": 1,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:buyer\", \"value\": 6}, {\"lever\": \"capacity:receiving_clerk\", \"value\": 2}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:buyer",
+         "value": 6
+        },
+        {
+         "lever": "capacity:receiving_clerk",
+         "value": 2
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "out_of_bounds",
+         "path": "changes.capacity:buyer",
+         "message": "6 outside permitted 3..5 (step 1)"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": true
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "proc-h6",
+   "pack": "procurement",
+   "split": "heldout",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Run the baseline under the receipt-heavy demand.",
+    "pack_id": "procurement",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:baseline",
+     "changes": []
+    },
+    "demand_condition": "receipt_heavy",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"procurement\", \"in_scope\": true, \"changes\": [], \"demand_condition\": \"receipt_heavy\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "procurement",
+       "in_scope": true,
+       "changes": [],
+       "demand_condition": "receipt_heavy",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:baseline",
+        "changes": []
+       },
+       "demand_condition": "receipt_heavy",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-d1",
+   "pack": "support",
+   "split": "dev",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Automate ticket routing under normal demand.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:variant:routing=auto_classify",
+     "changes": [
+      {
+       "lever": "variant:routing",
+       "value": "auto_classify"
+      }
+     ]
+    },
+    "demand_condition": "normal",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": true, \"changes\": [{\"lever\": \"variant:routing\", \"value\": \"auto_classify\"}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "variant:routing",
+         "value": "auto_classify"
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:variant:routing=auto_classify",
+        "changes": [
+         {
+          "lever": "variant:routing",
+          "value": "auto_classify"
+         }
+        ]
+       },
+       "demand_condition": "normal",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-d2",
+   "pack": "support",
+   "split": "dev",
+   "category": "over_budget",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "over_budget",
+   "actual_codes": [
+    "over_budget"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Add 1 specialist during the billing spike.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "over_budget",
+      "path": "resources",
+      "message": "staffed cost 768.00/h exceeds budget 760.00/h"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:specialist\", \"value\": 5}], \"demand_condition\": \"billing_spike\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:specialist",
+         "value": 5
+        }
+       ],
+       "demand_condition": "billing_spike",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "over_budget",
+         "path": "resources",
+         "message": "staffed cost 768.00/h exceeds budget 760.00/h"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-d3",
+   "pack": "support",
+   "split": "dev",
+   "category": "control",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "control_locked",
+   "actual_codes": [
+    "control_locked"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Skip QA review on refunds during a surge.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "control_locked",
+      "path": "changes.remove_control:refund-qa",
+      "message": "mandatory controls cannot be removed, bypassed or changed"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": true, \"changes\": [{\"lever\": \"remove_control:refund-qa\", \"value\": \"removed\"}], \"demand_condition\": \"surge_25\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "remove_control:refund-qa",
+         "value": "removed"
+        }
+       ],
+       "demand_condition": "surge_25",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "control_locked",
+         "path": "changes.remove_control:refund-qa",
+         "message": "mandatory controls cannot be removed, bypassed or changed"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-d4",
+   "pack": "support",
+   "split": "dev",
+   "category": "missing",
+   "expected_status": "needs_input",
+   "actual_status": "needs_input",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Hire some tier 2 agents for peak demand.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "needs_input",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [
+     "How many tier 2 agents should the scenario use?",
+     "What value should 'capacity:tier2_agent' take?"
+    ],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:tier2_agent\", \"value\": null}], \"demand_condition\": \"surge_25\", \"unknowns\": [\"How many tier 2 agents should the scenario use?\"], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:tier2_agent",
+         "value": null
+        }
+       ],
+       "demand_condition": "surge_25",
+       "unknowns": [
+        "How many tier 2 agents should the scenario use?"
+       ],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "needs_input",
+       "issues": [],
+       "questions": [
+        "How many tier 2 agents should the scenario use?",
+        "What value should 'capacity:tier2_agent' take?"
+       ],
+       "change_set": null,
+       "demand_condition": "surge_25",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-d5",
+   "pack": "support",
+   "split": "dev",
+   "category": "out_of_scope",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "out_of_scope",
+   "actual_codes": [
+    "out_of_scope"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Write a poem about support tickets.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "out_of_scope",
+      "path": "request",
+      "message": "request is not a what-if over this pack's permitted levers (the prototype never changes live systems)"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": false, \"changes\": [], \"demand_condition\": null, \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": false,
+       "changes": [],
+       "demand_condition": null,
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "out_of_scope",
+         "path": "request",
+         "message": "request is not a what-if over this pack's permitted levers (the prototype never changes live systems)"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-d6",
+   "pack": "support",
+   "split": "dev",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Set tier 1 agents to 3 and automate routing under current demand.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:capacity:tier1_agent=3, variant:routing=auto_classify",
+     "changes": [
+      {
+       "lever": "capacity:tier1_agent",
+       "value": 3
+      },
+      {
+       "lever": "variant:routing",
+       "value": "auto_classify"
+      }
+     ]
+    },
+    "demand_condition": "normal",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:tier1_agent\", \"value\": 3}, {\"lever\": \"variant:routing\", \"value\": \"auto_classify\"}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:tier1_agent",
+         "value": 3
+        },
+        {
+         "lever": "variant:routing",
+         "value": "auto_classify"
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:capacity:tier1_agent=3, variant:routing=auto_classify",
+        "changes": [
+         {
+          "lever": "capacity:tier1_agent",
+          "value": 3
+         },
+         {
+          "lever": "variant:routing",
+          "value": "auto_classify"
+         }
+        ]
+       },
+       "demand_condition": "normal",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-h1",
+   "pack": "support",
+   "split": "heldout",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": false,
+   "reason": "changes {'priority:queue_policy': 'high_value_first'} != expected {'capacity:specialist': 3, 'priority:queue_policy': 'high_value_first'}",
+   "outcome": {
+    "request": "Reduce specialists by 1 and prioritise high-value refunds, normal volume.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:priority:queue_policy=high_value_first",
+     "changes": [
+      {
+       "lever": "priority:queue_policy",
+       "value": "high_value_first"
+      }
+     ]
+    },
+    "demand_condition": "normal",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": true, \"changes\": [{\"lever\": \"priority:queue_policy\", \"value\": \"high_value_first\"}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "priority:queue_policy",
+         "value": "high_value_first"
+        }
+       ],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:priority:queue_policy=high_value_first",
+        "changes": [
+         {
+          "lever": "priority:queue_policy",
+          "value": "high_value_first"
+         }
+        ]
+       },
+       "demand_condition": "normal",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-h2",
+   "pack": "support",
+   "split": "heldout",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Use 8 tier-2 agents under the surge.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:capacity:tier2_agent=8",
+     "changes": [
+      {
+       "lever": "capacity:tier2_agent",
+       "value": 8
+      }
+     ]
+    },
+    "demand_condition": "surge_25",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:tier2_agent\", \"value\": 8}], \"demand_condition\": \"surge_25\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:tier2_agent",
+         "value": 8
+        }
+       ],
+       "demand_condition": "surge_25",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:capacity:tier2_agent=8",
+        "changes": [
+         {
+          "lever": "capacity:tier2_agent",
+          "value": 8
+         }
+        ]
+       },
+       "demand_condition": "surge_25",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-h3",
+   "pack": "support",
+   "split": "heldout",
+   "category": "control",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "control_locked",
+   "actual_codes": [
+    "control_locked"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Turn off the refund QA for the billing spike.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "control_locked",
+      "path": "changes.remove_control:refund-qa",
+      "message": "mandatory controls cannot be removed, bypassed or changed"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": true, \"changes\": [{\"lever\": \"remove_control:refund-qa\", \"value\": \"removed\"}], \"demand_condition\": \"billing_spike\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "remove_control:refund-qa",
+         "value": "removed"
+        }
+       ],
+       "demand_condition": "billing_spike",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "control_locked",
+         "path": "changes.remove_control:refund-qa",
+         "message": "mandatory controls cannot be removed, bypassed or changed"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-h4",
+   "pack": "support",
+   "split": "heldout",
+   "category": "missing",
+   "expected_status": "needs_input",
+   "actual_status": "needs_input",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Automate routing and add 1 tier 1 agent.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "needs_input",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [
+     "Which demand condition should be simulated? Options: billing_spike, normal, surge_25."
+    ],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": true, \"changes\": [{\"lever\": \"capacity:tier1_agent\", \"value\": 5}, {\"lever\": \"variant:routing\", \"value\": \"auto_classify\"}], \"demand_condition\": null, \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": true,
+       "changes": [
+        {
+         "lever": "capacity:tier1_agent",
+         "value": 5
+        },
+        {
+         "lever": "variant:routing",
+         "value": "auto_classify"
+        }
+       ],
+       "demand_condition": null,
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "needs_input",
+       "issues": [],
+       "questions": [
+        "Which demand condition should be simulated? Options: billing_spike, normal, surge_25."
+       ],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-h5",
+   "pack": "support",
+   "split": "heldout",
+   "category": "out_of_scope",
+   "expected_status": "rejected",
+   "actual_status": "rejected",
+   "expected_code": "out_of_scope",
+   "actual_codes": [
+    "out_of_scope"
+   ],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Push the new routing policy to the live system.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "rejected",
+    "change_set": null,
+    "demand_condition": null,
+    "questions": [],
+    "issues": [
+     {
+      "severity": "error",
+      "code": "out_of_scope",
+      "path": "request",
+      "message": "request is not a what-if over this pack's permitted levers (the prototype never changes live systems)"
+     }
+    ],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": false, \"changes\": [], \"demand_condition\": null, \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": false,
+       "changes": [],
+       "demand_condition": null,
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "rejected",
+       "issues": [
+        {
+         "severity": "error",
+         "code": "out_of_scope",
+         "path": "request",
+         "message": "request is not a what-if over this pack's permitted levers (the prototype never changes live systems)"
+        }
+       ],
+       "questions": [],
+       "change_set": null,
+       "demand_condition": null,
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "sup-h6",
+   "pack": "support",
+   "split": "heldout",
+   "category": "normal",
+   "expected_status": "ok",
+   "actual_status": "ok",
+   "expected_code": null,
+   "actual_codes": [],
+   "correct": true,
+   "reason": "match",
+   "outcome": {
+    "request": "Compare the as-is operation under normal demand.",
+    "pack_id": "support",
+    "proposer": "scripted-fake-v1",
+    "proposer_kind": "scripted",
+    "status": "ok",
+    "change_set": {
+     "name": "proposal:baseline",
+     "changes": []
+    },
+    "demand_condition": "normal",
+    "questions": [],
+    "issues": [],
+    "attempts": [
+     {
+      "index": 0,
+      "raw_text": "{\"pack_id\": \"support\", \"in_scope\": true, \"changes\": [], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+      "proposal": {
+       "pack_id": "support",
+       "in_scope": true,
+       "changes": [],
+       "demand_condition": "normal",
+       "unknowns": [],
+       "rationale": "Scripted keyword mapping (not a model)."
+      },
+      "critique": {
+       "status": "ok",
+       "issues": [],
+       "questions": [],
+       "change_set": {
+        "name": "proposal:baseline",
+        "changes": []
+       },
+       "demand_condition": "normal",
+       "repairable": false
+      },
+      "parse_issues": [],
+      "usage": null,
+      "error": null
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+# Pricing assumptions for opt-in real-model runs. These are NOT measured by this project.
+# Verify current prices on the provider's pricing page before any run; update `as_of` when you do.
+[meta]
+as_of = "2026-11-03"
+currency = "USD"
+source = "Anthropic first-party API list prices as recorded in this repository on the as_of date; verify at https://www.anthropic.com/pricing"
+
+[models."claude-haiku-5-5"]
+input_per_mtok = 0.10
+output_per_mtok = 0.50
+note = "Rate for prompts up to 100K tokens; this project's prompts are far below that."
+
+[models."claude-sonnet-5-5"]
+input_per_mtok = 2.00
+output_per_mtok = 10.00
+
+[models."claude-opus-5-5"]
+input_per_mtok = 4.00
+output_per_mtok = 20.00
