@@ -16,6 +16,178 @@ from agentic_ops_twin.simulation.exogenous import arrival_stream
 from agentic_ops_twin.simulation.validate import validate
 
 DEFAULT_LEDGER = "results/ledger.sqlite"
+DEFAULT_WORKSPACE = ".ops-twin"
+
+
+def _ws(args: argparse.Namespace) -> tuple[Any, Any]:
+    from agentic_ops_twin.governance.writegate import Keyring, SystemOfRecord
+
+    root = Path(args.workspace)
+    return SystemOfRecord(root / "system_of_record.json"), Keyring(root / "keyring.json")
+
+
+def cmd_trust(args: argparse.Namespace) -> None:
+    from agentic_ops_twin.governance.trust import assess, load_history
+
+    pack = get_pack(args.pack)
+    if args.arrivals and args.events:
+        arrivals, events = load_history(Path(args.arrivals), Path(args.events))
+        hours = max(a.time for a in arrivals) if arrivals else 0.0
+        a = assess(
+            pack.model,
+            arrivals=arrivals,
+            events=events,
+            history_hours=hours,
+            evidence=f"observed export {args.events}",
+        )
+    else:
+        a = assess(pack.model)
+    rec = Ledger(args.ledger).append("trust_assessment", a.model_dump(mode="json"))
+    print(f"trust {rec.record_id}: {a.status}. {a.effect}")
+    for d in a.diagnostics:
+        print(f"  {'FLAG' if d.flagged else 'ok  '} {d.name} = {d.statistic:.3f}")
+
+
+def cmd_package(args: argparse.Namespace) -> None:
+    from agentic_ops_twin.governance.writegate import stage
+
+    sor, _ = _ws(args)
+    rec = stage(
+        Ledger(args.ledger),
+        sor,
+        get_pack(args.pack),
+        brief_record=args.brief,
+        trust_record=args.trust,
+        maker=args.maker,
+    )
+    pkg = rec.payload["package"]
+    print(
+        f"escrowed {rec.record_id}: {pkg['risk_tier']}-risk, needs "
+        f"{pkg['required_approvals']} approval(s); nothing written yet"
+    )
+    for d in pkg["field_diff"]:
+        print(f"  {d['field']}: {d['before']} -> {d['after']}")
+    for r in pkg["risk_reasons"]:
+        print(f"  risk: {r}")
+
+
+def cmd_reviewer(args: argparse.Namespace) -> None:
+    _, keyring = _ws(args)
+    keyring.add(args.name)
+    print(
+        f"created a local approval key for '{args.name}' (illustrative identity, not "
+        "authentication)"
+    )
+
+
+def cmd_approve(args: argparse.Namespace) -> None:
+    from agentic_ops_twin.governance.writegate import approve
+
+    _, keyring = _ws(args)
+    rec = approve(
+        Ledger(args.ledger),
+        keyring,
+        package_record=args.package,
+        reviewer=args.reviewer,
+        decision=args.decision,
+        acknowledge_unvalidated=args.acknowledge_unvalidated,
+        note=args.note or "",
+    )
+    print(
+        f"{args.decision} {rec.record_id} by {args.reviewer} (signs payload "
+        f"{rec.payload['payload_sha256'][:12]}, expires {rec.payload['expires_at']})"
+    )
+
+
+def cmd_release(args: argparse.Namespace) -> None:
+    from agentic_ops_twin.governance.writegate import release
+
+    sor, keyring = _ws(args)
+    pack = get_pack(args.pack)
+    rec = release(
+        Ledger(args.ledger),
+        sor,
+        keyring,
+        pack,
+        package_record=args.package,
+        requester=args.requester,
+    )
+    if rec.kind == "refusal":
+        print(f"REFUSED {rec.record_id}; system of record unchanged:")
+        for r in rec.payload["reasons"]:
+            print(f"  - {r}")
+        sys.exit(2)
+    print(f"released {rec.record_id}: written to the sandboxed system of record and read back")
+    for d in rec.payload["written"]:
+        print(f"  {d['field']}: {d['before']} -> {d['after']}")
+
+
+def cmd_sor(args: argparse.Namespace) -> None:
+    sor, _ = _ws(args)
+    print(json.dumps(sor.read(get_pack(args.pack)), indent=1, sort_keys=True))
+
+
+def cmd_eval_harness(args: argparse.Namespace) -> None:
+    from agentic_ops_twin.governance.harness_eval import render_harness, run_harness_eval
+
+    rep = run_harness_eval(args.pack, export_dir=Path(args.out) / "harness")
+    out = Path(args.out) / "harness"
+    _write(out / f"eval-{args.pack}.json", json.dumps(rep.model_dump(mode="json"), indent=1))
+    _write(out / f"eval-{args.pack}.md", render_harness(rep))
+    print(f"harness: {rep.passed}/{rep.total} cases passed")
+    if rep.passed != rep.total:
+        sys.exit(1)
+
+
+def cmd_eval_routing(args: argparse.Namespace) -> None:
+    from agentic_ops_twin.agent.eval import evaluate_routed
+    from agentic_ops_twin.agent.router import Router
+
+    tiers = [] if args.provider == "fake" else [_proposer(args)]
+    rep = evaluate_routed(Router(tiers=tiers), split=args.split)
+    out = Path(args.out) / "agent"
+    tag = "compiled" if not tiers else f"compiled+{args.model}"
+    _write(out / f"routing-{tag}.json", json.dumps(rep.model_dump(mode="json"), indent=1))
+    lines = [
+        f"# Routing evaluation: {rep.router}",
+        "",
+        "Compiled rules run first. Anything they cannot fully account for is skipped with a "
+        "reason and escalated: to model tiers if configured, otherwise to an operator queue. "
+        "The compiled rules and the requests share authors, so this measures the routing "
+        "harness, not AI capability.",
+        "",
+        f"- Requests: {rep.n}; handled automatically: {rep.handled}; skipped to a human: "
+        f"{rep.skipped} (skip rate {rep.skip_rate:.1%})",
+        f"- Correct: {rep.correct}; **wrong: {rep.wrong}** (wrong-answer rate "
+        f"{rep.wrong_answer_rate:.1%})",
+        f"- Control-removal requests that became runnable: {rep.control_requests_runnable}",
+        "",
+        "| Request | Split | Category | Outcome | Decided by | Skip reason |",
+        "|---|---|---|---|---|---|",
+    ]
+    for r in rep.results:
+        outcome = "skipped" if r.correct is None else ("correct" if r.correct else "WRONG")
+        lines.append(
+            f"| {r.id} | {r.split} | {r.category} | {outcome} | {r.decided_by or '—'} "
+            f"| {r.skip_reason or '—'} |"
+        )
+    _write(out / f"routing-{tag}.md", "\n".join(lines) + "\n")
+    print(f"{rep.router}: correct {rep.correct}, wrong {rep.wrong}, skipped {rep.skipped}")
+
+
+def cmd_stress(args: argparse.Namespace) -> None:
+    from agentic_ops_twin.decision.stress import breaking_point
+
+    pack = get_pack(args.pack)
+    res = breaking_point(
+        pack,
+        pack.model,
+        name="baseline",
+        label="current operation",
+        seeds=pack.splits.heldout_seeds[: args.seeds],
+        workers=args.workers,
+    )
+    print(json.dumps(res.model_dump(mode="json"), indent=1))
 
 
 def _write(path: Path, text: str) -> None:
@@ -115,9 +287,25 @@ def cmd_brief(args: argparse.Namespace) -> None:
     chosen = study.selections.get("capacity_aware_sim")
     if chosen is None:
         sys.exit("the capacity-aware method found no feasible alternative; nothing to brief")
+    from agentic_ops_twin.decision.scenarios import ChangeSet, apply_changes
+    from agentic_ops_twin.decision.stress import breaking_point
+
     rows = [r for r in study.heldout if r.alternative == chosen]
     base = [r for r in study.heldout if r.alternative == "baseline"]
     label = rows[0].label if rows else chosen
+    record = next(a for a in study.alternatives if a.name == chosen)
+    change_set = ChangeSet(name=chosen, changes=record.changes)
+    stress = []
+    if not args.no_stress:
+        seeds = study.heldout_seeds[:6]
+        changed, _ = apply_changes(pack.model, pack.decision_space, change_set)
+        for name, lbl, model in (
+            ("baseline", "current operation", pack.model),
+            (chosen, label, changed),
+        ):
+            stress.append(
+                breaking_point(pack, model, name=name, label=lbl, seeds=seeds, workers=args.workers)
+            )
     brief = build_brief(
         pack_id=pack.id,
         subject=f"capacity-aware selection `{label}`",
@@ -126,15 +314,24 @@ def cmd_brief(args: argparse.Namespace) -> None:
         rows=rows,
         baseline_rows=base,
         narrator=_narrator(args),
+        change_set=change_set,
+        stress=stress,
     )
     brec = ledger.append("brief", {"brief": brief.model_dump(mode="json")}, refs=[rec_id])
+    if stress:
+        _write(
+            Path(args.out) / pack.id / "stress.json",
+            json.dumps([s.model_dump(mode="json") for s in stress], indent=1),
+        )
     _write(
         Path(args.out) / pack.id / "brief.md",
         brief.markdown + f"\nBrief ledger record: `{brec.record_id}`\n",
     )
     print(
-        f"brief {brec.record_id} (grounded: {brief.narrative_grounding.grounded}); review with:\n"
-        f"  ops-twin review --brief {brec.record_id} --reviewer <name> --decision approve"
+        f"brief {brec.record_id} (grounded: {brief.narrative_grounding.grounded}). Stage it for "
+        f"governed write-back with:\n  ops-twin trust --pack {pack.id}\n"
+        f"  ops-twin package --pack {pack.id} --brief {brec.record_id} --trust <trust-record> "
+        "--maker <name>"
     )
 
 
@@ -157,15 +354,26 @@ def cmd_review(args: argparse.Namespace) -> None:
 
 
 def cmd_propose(args: argparse.Namespace) -> None:
-    from agentic_ops_twin.agent.loop import run_proposal
+
+    from agentic_ops_twin.agent.router import Router
 
     pack = get_pack(args.pack)
-    proposer = _proposer(args)
+    tiers = [] if args.provider == "fake" else [_proposer(args)]
+    router = Router(tiers=tiers)
     ledger = Ledger(args.ledger)
     req = ledger.append("request", {"pack": pack.id, "text": args.request})
-    outcome = run_proposal(args.request, pack, proposer)
-    prec = ledger.append("proposal", outcome.model_dump(mode="json"), refs=[req.record_id])
-    print(f"proposer: {outcome.proposer} ({outcome.proposer_kind})")
+    routed = router.route(args.request, pack)
+    prec = ledger.append("proposal", routed.model_dump(mode="json"), refs=[req.record_id])
+    for step in routed.route:
+        print(f"route: {step.tier} ({step.kind}) -> {step.status}: {step.reason}")
+    if routed.outcome is None:
+        print(
+            f"status: skipped ({routed.skip_reason}); routed to an operator queue. "
+            f"Record {prec.record_id}"
+        )
+        return
+    outcome = routed.outcome
+    print(f"decided by: {routed.decided_by}")
     print(f"status: {outcome.status}")
     for q in outcome.questions:
         print(f"  question: {q}")
@@ -198,7 +406,7 @@ def cmd_propose(args: argparse.Namespace) -> None:
             "baseline": base.model_dump(mode="json"),
             "alternative": alt.model_dump(mode="json"),
         },
-        refs=[prec.record_id],
+        edges=[("evaluates", prec.record_id)],
     )
     brief = build_brief(
         pack_id=pack.id,
@@ -207,10 +415,11 @@ def cmd_propose(args: argparse.Namespace) -> None:
         model=pack.model,
         rows=[alt],
         baseline_rows=[base],
+        change_set=outcome.change_set,
     )
     brec = ledger.append("brief", {"brief": brief.model_dump(mode="json")}, refs=[erec.record_id])
     print(brief.markdown)
-    print(f"brief record {brec.record_id}; nothing has been deployed")
+    print(f"brief record {brec.record_id}; nothing has been written to any system")
 
 
 def cmd_eval_agent(args: argparse.Namespace) -> None:
@@ -257,12 +466,21 @@ def cmd_eval_agent(args: argparse.Namespace) -> None:
 
 def cmd_ledger(args: argparse.Namespace) -> None:
     ledger = Ledger(args.ledger)
+    if args.action == "reconstruct":
+        if not args.record:
+            sys.exit("ledger reconstruct needs --record <id>")
+        rp = ledger.reconstruction_pack(args.record)
+        out = Path(args.out)
+        _write(out / f"{args.record}.json", json.dumps(rp.to_json(), indent=1))
+        _write(out / f"{args.record}.md", rp.timeline_markdown())
+        return
     if args.action == "verify":
         ok, problems = ledger.verify()
         print("ledger chain verified" if ok else "LEDGER PROBLEMS:\n" + "\n".join(problems))
         sys.exit(0 if ok else 1)
     for r in ledger.records():
-        print(f"{r.seq:4d} {r.created_at} {r.record_id:28s} refs={r.refs}")
+        valid = "" if ledger.is_valid(r.record_id) or r.kind == "invalidation" else " [invalid]"
+        print(f"{r.seq:4d} {r.created_at} {r.record_id:30s}{valid} {r.edges}")
 
 
 def cmd_dataset(args: argparse.Namespace) -> None:
@@ -336,9 +554,42 @@ def cmd_figures(args: argparse.Namespace) -> None:
         print(f"wrote {path}")
 
 
+REPRODUCE_STEPS: tuple[tuple[str, ...], ...] = (
+    ("study", "--pack", "all", "--profile", "full"),
+    ("research", "--pack", "all"),
+    ("eval-agent", "--provider", "fake"),
+    ("eval-routing", "--provider", "fake"),
+    ("eval-harness", "--pack", "insurance"),
+    ("brief", "--pack", "insurance"),
+    ("brief", "--pack", "procurement"),
+    ("brief", "--pack", "support"),
+    ("ledger", "verify"),
+    ("figures",),
+)
+
+
+def cmd_reproduce(args: argparse.Namespace) -> None:
+    """Regenerate every committed result, report and figure from a fresh ledger."""
+    ledger = Path(args.ledger)
+    if ledger.exists():
+        ledger.unlink()
+    for step in REPRODUCE_STEPS:
+        print(f"\n== ops-twin {' '.join(step)}")
+        try:
+            main(["--ledger", args.ledger, "--workspace", args.workspace, *step])
+        except SystemExit as exc:
+            if exc.code not in (0, None):
+                raise
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="ops-twin", description=__doc__)
     p.add_argument("--ledger", default=DEFAULT_LEDGER)
+    p.add_argument(
+        "--workspace",
+        default=DEFAULT_WORKSPACE,
+        help="sandboxed system of record and local approval keys",
+    )
     sub = p.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("packs", help="list domain packs").set_defaults(fn=cmd_packs)
@@ -388,6 +639,8 @@ def build_parser() -> argparse.ArgumentParser:
     b.add_argument("--narrator", choices=("template", "anthropic"), default="template")
     model_flags(b)
     b.add_argument("--out", default="results")
+    b.add_argument("--no-stress", action="store_true", help="skip the breaking-point test")
+    b.add_argument("--workers", type=int)
     b.set_defaults(fn=cmd_brief)
 
     rv = sub.add_parser("review", help="record a named human review of a brief")
@@ -398,7 +651,9 @@ def build_parser() -> argparse.ArgumentParser:
     rv.set_defaults(fn=cmd_review)
 
     lg = sub.add_parser("ledger", help="list or verify the evidence ledger")
-    lg.add_argument("action", choices=("list", "verify"))
+    lg.add_argument("action", choices=("list", "verify", "reconstruct"))
+    lg.add_argument("--record")
+    lg.add_argument("--out", default="results/reconstruction")
     lg.set_defaults(fn=cmd_ledger)
 
     ds = sub.add_parser("dataset", help="export seeded synthetic case streams and event logs")
@@ -419,6 +674,63 @@ def build_parser() -> argparse.ArgumentParser:
     fg.add_argument("--results", default="results")
     fg.add_argument("--out", default="docs/assets/figures")
     fg.set_defaults(fn=cmd_figures)
+
+    tr = sub.add_parser("trust", help="assess whether the twin may inform a change")
+    tr.add_argument("--pack", choices=PACK_IDS, required=True)
+    tr.add_argument("--arrivals", help="observed arrivals CSV (format of `ops-twin dataset`)")
+    tr.add_argument("--events", help="observed event-log CSV (format of `ops-twin dataset`)")
+    tr.set_defaults(fn=cmd_trust)
+
+    pk = sub.add_parser("package", help="escrow a brief's change set for governed write-back")
+    pk.add_argument("--pack", choices=PACK_IDS, required=True)
+    pk.add_argument("--brief", required=True)
+    pk.add_argument("--trust", required=True)
+    pk.add_argument("--maker", required=True)
+    pk.set_defaults(fn=cmd_package)
+
+    rv2 = sub.add_parser("reviewer", help="manage local approval keys")
+    rv2.add_argument("action", choices=("add",))
+    rv2.add_argument("name")
+    rv2.set_defaults(fn=cmd_reviewer)
+
+    ap = sub.add_parser("approve", help="sign an escrowed change package")
+    ap.add_argument("--package", required=True)
+    ap.add_argument("--reviewer", required=True)
+    ap.add_argument("--decision", choices=("approve", "reject"), default="approve")
+    ap.add_argument("--acknowledge-unvalidated", action="store_true")
+    ap.add_argument("--note")
+    ap.set_defaults(fn=cmd_approve)
+
+    rl = sub.add_parser("release", help="release an approved package to the sandbox")
+    rl.add_argument("--pack", choices=PACK_IDS, required=True)
+    rl.add_argument("--package", required=True)
+    rl.add_argument("--requester", required=True)
+    rl.set_defaults(fn=cmd_release)
+
+    so = sub.add_parser("sor", help="show the sandboxed system of record for a pack")
+    so.add_argument("--pack", choices=PACK_IDS, required=True)
+    so.set_defaults(fn=cmd_sor)
+
+    eh = sub.add_parser("eval-harness", help="golden jobs and negative tests for write-back")
+    eh.add_argument("--pack", choices=PACK_IDS, default="insurance")
+    eh.add_argument("--out", default="results")
+    eh.set_defaults(fn=cmd_eval_harness)
+
+    er = sub.add_parser("eval-routing", help="compiled-first routing on labelled requests")
+    er.add_argument("--provider", choices=("fake", "anthropic"), default="fake")
+    model_flags(er)
+    er.add_argument("--split", choices=("dev", "heldout"))
+    er.add_argument("--out", default="results")
+    er.set_defaults(fn=cmd_eval_routing)
+
+    sx = sub.add_parser("stress", help="breaking-point test of a pack's current operation")
+    sx.add_argument("--pack", choices=PACK_IDS, required=True)
+    sx.add_argument("--seeds", type=int, default=6)
+    sx.add_argument("--workers", type=int)
+    sx.set_defaults(fn=cmd_stress)
+
+    rp = sub.add_parser("reproduce", help="regenerate every committed result and figure")
+    rp.set_defaults(fn=cmd_reproduce)
     return p
 
 

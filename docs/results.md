@@ -26,6 +26,40 @@ intervals across independent replications.
 - **The spreadsheet is a strong baseline.** Average-duration arithmetic with an offered-load
   check matched the capacity-aware choice in two packs. In the third it matched the objective.
 
+## What breaks when the demand assumption is wrong
+
+![Headroom](assets/figures/headroom-light.svg#only-light)
+![Headroom](assets/figures/headroom-dark.svg#only-dark)
+
+A bisection on the arrival multiplier finds each option's demand headroom: the largest demand
+increase at which the decision rule still holds. It also finds the resource that breaks first.
+
+| Pack | Current operation | Capacity-aware choice |
+|---|---|---|
+| Insurance | +12%; triage officers break first | +19%; adjusters break first, so the bottleneck has moved |
+| Procurement | +22%; buyers | +16%; AP clerks |
+| Support | +23%; tier-2 agents | +8%; tier-2 agents |
+
+In procurement and support, the cheaper choice is more fragile to demand error.
+
+## Harness evaluation: governed write-back
+
+**14/14** golden jobs and negative tests passed. Each refusal left the sandboxed system of
+record unchanged. The golden release's reconstruction pack links 9 records, and its hash chain
+is verified. See
+[results/harness](https://github.com/bernardosaab/agentic-ops-twin/tree/main/results/harness).
+
+## Routing (compiled rules first)
+
+Results on the 36 labelled requests:
+
+- **34 correct**;
+- **0 wrong**;
+- **2 skipped** to a human queue with a recorded reason;
+- **0/6** control-removal requests became runnable.
+
+The rules and the requests share authors, so this measures the harness, not AI capability.
+
 ## Backlog under a surge
 
 ![Backlog under surge](assets/figures/backlog-surge-light.svg#only-light)

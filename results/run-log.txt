@@ -1,41 +1,74 @@
+
+== ops-twin study --pack all --profile full
 wrote results\insurance\study-full.json
 wrote results\insurance\study-full.md
-insurance: selections {'spreadsheet': 'alt-2-6-1-automated-fifo', 'uncapacitated_sim': 'alt-2-5-1-automated-fifo', 'capacity_aware_sim': 'alt-2-6-1-automated-high_value_first'}; ledger record experiment-7a2d60c97332
+insurance: selections {'spreadsheet': 'alt-2-6-1-automated-fifo', 'uncapacitated_sim': 'alt-2-5-1-automated-fifo', 'capacity_aware_sim': 'alt-2-6-1-automated-high_value_first'}; ledger record experiment-9029496dc044
 wrote results\procurement\study-full.json
 wrote results\procurement\study-full.md
-procurement: selections {'spreadsheet': 'alt-2-3-1-ml_assisted-fifo', 'uncapacitated_sim': 'alt-2-3-1-manual-fifo', 'capacity_aware_sim': 'alt-2-3-1-ml_assisted-fifo'}; ledger record experiment-00fdcefe3fab
+procurement: selections {'spreadsheet': 'alt-2-3-1-ml_assisted-fifo', 'uncapacitated_sim': 'alt-2-3-1-manual-fifo', 'capacity_aware_sim': 'alt-2-3-1-ml_assisted-fifo'}; ledger record experiment-538947a93051
 wrote results\support\study-full.json
 wrote results\support\study-full.md
-support: selections {'spreadsheet': 'alt-3-6-4-auto_classify-fifo', 'uncapacitated_sim': 'alt-3-6-3-manual-fifo', 'capacity_aware_sim': 'alt-3-6-4-auto_classify-fifo'}; ledger record experiment-38ae1a8c0102
-insurance: H1=True H2=False H3=True (76.3 s); wrote results\insurance\research.json
-procurement: H1=True H2=False H3=True (91.1 s); wrote results\procurement\research.json
-support: H1=False H2=False H3=False (128.9 s); wrote results\support\research.json
+support: selections {'spreadsheet': 'alt-3-6-4-auto_classify-fifo', 'uncapacitated_sim': 'alt-3-6-3-manual-fifo', 'capacity_aware_sim': 'alt-3-6-4-auto_classify-fifo'}; ledger record experiment-8510b6837cdf
+
+== ops-twin research --pack all
+insurance: H1=True H2=False H3=True (63.3 s); wrote results\insurance\research.json
+procurement: H1=True H2=False H3=True (67.3 s); wrote results\procurement\research.json
+support: H1=False H2=False H3=False (120.7 s); wrote results\support\research.json
 wrote results\research.md
+
+== ops-twin eval-agent --provider fake
 wrote results\agent\eval-fake.json
 wrote results\agent\eval-fake.md
 scripted-fake-v1: 35/36
+
+== ops-twin eval-routing --provider fake
+wrote results\agent\routing-compiled.json
+wrote results\agent\routing-compiled.md
+router[scripted-fake-v1]: correct 34, wrong 0, skipped 2
+
+== ops-twin eval-harness --pack insurance
+wrote results\harness\eval-insurance.json
+wrote results\harness\eval-insurance.md
+harness: 14/14 cases passed
+
+== ops-twin brief --pack insurance
+wrote results\insurance\stress.json
 wrote results\insurance\brief.md
-brief brief-281463bd1314 (grounded: True); review with:
-  ops-twin review --brief brief-281463bd1314 --reviewer <name> --decision approve
+brief brief-f9376861f947 (grounded: True). Stage it for governed write-back with:
+  ops-twin trust --pack insurance
+  ops-twin package --pack insurance --brief brief-f9376861f947 --trust <trust-record> --maker <name>
+
+== ops-twin brief --pack procurement
+wrote results\procurement\stress.json
 wrote results\procurement\brief.md
-brief brief-07f49f0e1aba (grounded: True); review with:
-  ops-twin review --brief brief-07f49f0e1aba --reviewer <name> --decision approve
+brief brief-ac4c00f253fb (grounded: True). Stage it for governed write-back with:
+  ops-twin trust --pack procurement
+  ops-twin package --pack procurement --brief brief-ac4c00f253fb --trust <trust-record> --maker <name>
+
+== ops-twin brief --pack support
+wrote results\support\stress.json
 wrote results\support\brief.md
-brief brief-2ab49bea5efd (grounded: True); review with:
-  ops-twin review --brief brief-2ab49bea5efd --reviewer <name> --decision approve
-exported 1110 arrivals and 4678 events to results\datasets
+brief brief-eacc865a5e61 (grounded: True). Stage it for governed write-back with:
+  ops-twin trust --pack support
+  ops-twin package --pack support --brief brief-eacc865a5e61 --trust <trust-record> --maker <name>
+
+== ops-twin ledger verify
 ledger chain verified
+
+== ops-twin figures
 wrote docs\assets\figures\decision-quality-light.svg
 wrote docs\assets\figures\calibrated-but-wrong-light.svg
 wrote docs\assets\figures\ranking-validity-light.svg
 wrote docs\assets\figures\backlog-surge-light.svg
 wrote docs\assets\figures\downstream-shift-light.svg
+wrote docs\assets\figures\headroom-light.svg
 wrote docs\assets\figures\decision-quality-dark.svg
 wrote docs\assets\figures\calibrated-but-wrong-dark.svg
 wrote docs\assets\figures\ranking-validity-dark.svg
 wrote docs\assets\figures\backlog-surge-dark.svg
 wrote docs\assets\figures\downstream-shift-dark.svg
+wrote docs\assets\figures\headroom-dark.svg
 
-real	9m28.057s
-user	0m0.015s
-sys	0m0.045s
+real	9m3.495s
+user	0m0.000s
+sys	0m0.015s

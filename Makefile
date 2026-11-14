@@ -33,13 +33,8 @@ demo:  ## Two-minute offline demo on the insurance pack
 	ops-twin propose --pack insurance "Skip the fraud check under normal demand."
 	ops-twin ledger verify
 
-reproduce:  ## Regenerate every committed result and figure (~10 min on 6 cores)
-	ops-twin study --pack all --profile full
-	ops-twin research --pack all
-	ops-twin eval-agent --provider fake
-	ops-twin brief --pack insurance && ops-twin brief --pack procurement && ops-twin brief --pack support
-	ops-twin ledger verify
-	ops-twin figures
+reproduce:  ## Regenerate every committed result and figure (~12 min on 6 cores)
+	ops-twin reproduce
 
 figures:  ## Re-render README/docs figures from results/
 	ops-twin figures

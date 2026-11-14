@@ -165,3 +165,98 @@ def evaluate(
         total_estimated_cost_usd=round(cost, 6) if have_usage and usage_complete else None,
         results=results,
     )
+
+
+class RoutedResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    id: str
+    pack: str
+    split: str
+    category: str
+    status: str
+    decided_by: str | None
+    skip_reason: str | None
+    correct: bool | None
+    reason: str
+
+
+class RoutedEvalReport(BaseModel):
+    """End-to-end routing evaluation: accuracy on handled requests is reported separately from
+    the skip rate, so a router cannot look accurate by quietly guessing."""
+
+    model_config = ConfigDict(extra="forbid")
+    router: str
+    dataset_version: str
+    n: int
+    handled: int
+    correct: int
+    wrong: int
+    skipped: int
+    skip_rate: float
+    wrong_answer_rate: float
+    control_requests_runnable: int
+    by_split: dict[str, dict[str, int]]
+    results: list[RoutedResult]
+
+
+def evaluate_routed(router: Any, *, split: str | None = None) -> RoutedEvalReport:
+    version, reqs = load_requests()
+    reqs = [r for r in reqs if split is None or r.split == split]
+    rows: list[RoutedResult] = []
+    by_split: dict[str, dict[str, int]] = defaultdict(
+        lambda: {"n": 0, "correct": 0, "wrong": 0, "skipped": 0}
+    )
+    for r in reqs:
+        out = router.route(r.text, get_pack(r.pack))
+        bucket = by_split[r.split]
+        bucket["n"] += 1
+        if out.status == "skipped" or out.outcome is None:
+            rows.append(
+                RoutedResult(
+                    id=r.id,
+                    pack=r.pack,
+                    split=r.split,
+                    category=r.category,
+                    status="skipped",
+                    decided_by=None,
+                    skip_reason=out.skip_reason,
+                    correct=None,
+                    reason="routed to a human queue",
+                )
+            )
+            bucket["skipped"] += 1
+            continue
+        ok, why = score(r, out.outcome)
+        bucket["correct" if ok else "wrong"] += 1
+        rows.append(
+            RoutedResult(
+                id=r.id,
+                pack=r.pack,
+                split=r.split,
+                category=r.category,
+                status=out.status,
+                decided_by=out.decided_by,
+                skip_reason=out.skip_reason,
+                correct=ok,
+                reason=why,
+            )
+        )
+    handled = [x for x in rows if x.correct is not None]
+    correct = sum(1 for x in handled if x.correct)
+    skipped = len(rows) - len(handled)
+    return RoutedEvalReport(
+        router=router.name,
+        dataset_version=version,
+        n=len(rows),
+        handled=len(handled),
+        correct=correct,
+        wrong=len(handled) - correct,
+        skipped=skipped,
+        skip_rate=skipped / len(rows) if rows else 0.0,
+        wrong_answer_rate=(len(handled) - correct) / len(rows) if rows else 0.0,
+        control_requests_runnable=sum(
+            1 for x in rows if x.category == "control" and x.status == "ok"
+        ),
+        by_split=dict(by_split),
+        results=rows,
+    )

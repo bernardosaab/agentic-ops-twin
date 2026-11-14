@@ -1,0 +1,182 @@
+[
+ {
+  "alternative": "baseline",
+  "label": "current operation",
+  "seeds": [
+   9000,
+   9001,
+   9002,
+   9003,
+   9004,
+   9005
+  ],
+  "headroom_multiplier": 1.2344,
+  "first_failing_multiplier": 1.25,
+  "binding_constraint": "mean SLA attainment 0.836 < 0.85",
+  "breaks_first_at": "tier2_agent",
+  "points": [
+   {
+    "multiplier": 1.0,
+    "sla_attainment": 0.9910021007756847,
+    "completion_rate": 0.9920218682334149,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.7894872556225976
+   },
+   {
+    "multiplier": 1.125,
+    "sla_attainment": 0.9708445934094071,
+    "completion_rate": 0.9875900814967392,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.8907218537553195
+   },
+   {
+    "multiplier": 1.1875,
+    "sla_attainment": 0.9407491279334864,
+    "completion_rate": 0.9777936399020538,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.9387694519851366
+   },
+   {
+    "multiplier": 1.2188,
+    "sla_attainment": 0.9164299512954027,
+    "completion_rate": 0.971663241240004,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.9601002322774796
+   },
+   {
+    "multiplier": 1.2344,
+    "sla_attainment": 0.8869629698229805,
+    "completion_rate": 0.9682416324613864,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.9701633736483165
+   },
+   {
+    "multiplier": 1.25,
+    "sla_attainment": 0.8362885925287845,
+    "completion_rate": 0.9639909223291481,
+    "meets_rule": false,
+    "note": "mean SLA attainment 0.836 < 0.85",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.9792940165339044
+   },
+   {
+    "multiplier": 1.5,
+    "sla_attainment": 0.0005161734342739161,
+    "completion_rate": 0.7325825401808936,
+    "meets_rule": false,
+    "note": "mean completion rate 0.733 < 0.95",
+    "max_utilisation_resource": "tier1_agent",
+    "max_utilisation": 0.999999999999999
+   },
+   {
+    "multiplier": 2.0,
+    "sla_attainment": 0.0,
+    "completion_rate": 0.41612006802461027,
+    "meets_rule": false,
+    "note": "mean completion rate 0.416 < 0.95",
+    "max_utilisation_resource": "tier1_agent",
+    "max_utilisation": 0.9999999999999997
+   }
+  ]
+ },
+ {
+  "alternative": "alt-3-6-4-auto_classify-fifo",
+  "label": "capacity:tier1_agent=3, capacity:tier2_agent=6, variant:routing=auto_classify",
+  "seeds": [
+   9000,
+   9001,
+   9002,
+   9003,
+   9004,
+   9005
+  ],
+  "headroom_multiplier": 1.0781,
+  "first_failing_multiplier": 1.0938,
+  "binding_constraint": "mean SLA attainment 0.829 < 0.85",
+  "breaks_first_at": "tier2_agent",
+  "points": [
+   {
+    "multiplier": 1.0,
+    "sla_attainment": 0.9763631183808091,
+    "completion_rate": 0.9866196432578888,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.9180954156584074
+   },
+   {
+    "multiplier": 1.0625,
+    "sla_attainment": 0.9121452241681656,
+    "completion_rate": 0.9750954712680041,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.9683839615232289
+   },
+   {
+    "multiplier": 1.0781,
+    "sla_attainment": 0.875841604319285,
+    "completion_rate": 0.9687946665398327,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.9785338006317631
+   },
+   {
+    "multiplier": 1.0938,
+    "sla_attainment": 0.8293155513159434,
+    "completion_rate": 0.959371542260992,
+    "meets_rule": false,
+    "note": "mean SLA attainment 0.829 < 0.85",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.9849334566239089
+   },
+   {
+    "multiplier": 1.125,
+    "sla_attainment": 0.6364357591636574,
+    "completion_rate": 0.9397430257060884,
+    "meets_rule": false,
+    "note": "mean completion rate 0.940 < 0.95",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.9944777088955199
+   },
+   {
+    "multiplier": 1.25,
+    "sla_attainment": 0.12555873820602217,
+    "completion_rate": 0.8380190223957878,
+    "meets_rule": false,
+    "note": "mean completion rate 0.838 < 0.95",
+    "max_utilisation_resource": "tier2_agent",
+    "max_utilisation": 0.9995331645778749
+   },
+   {
+    "multiplier": 1.5,
+    "sla_attainment": 0.0020646937370956643,
+    "completion_rate": 0.671410844051816,
+    "meets_rule": false,
+    "note": "mean completion rate 0.671 < 0.95",
+    "max_utilisation_resource": "tier1_agent",
+    "max_utilisation": 0.9999999999999996
+   },
+   {
+    "multiplier": 2.0,
+    "sla_attainment": 0.0,
+    "completion_rate": 0.46469772187658887,
+    "meets_rule": false,
+    "note": "mean completion rate 0.465 < 0.95",
+    "max_utilisation_resource": "tier1_agent",
+    "max_utilisation": 0.9999999999999996
+   }
+  ]
+ }
+]

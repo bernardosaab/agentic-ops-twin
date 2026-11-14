@@ -1,6 +1,6 @@
 # Decision study: Customer-support escalations
 
-Model `support-escalations` v1.0.0 (digest `581d25fe15dde947`), generator `packs-v1`, exogenous scheme `blake2b-counter-v1`, profile `full`. 2280 simulated replications in 133.5 s.
+Model `support-escalations` v1.0.0 (digest `581d25fe15dde947`), generator `packs-v1`, exogenous scheme `blake2b-counter-v1`, profile `full`. 2280 simulated replications in 125.1 s.
 
 Search split: seeds 1000–1009 (10), conditions ['normal']. Held-out split: seeds 9000–9019 (20), conditions ['normal', 'surge_25', 'billing_spike'].
 
@@ -80,4 +80,4 @@ Change in mean utilisation by resource when only the automation variant is switc
 - The capacity-aware selection is re-evaluated on held-out seeds and demand, but the alternative set and decision rule were authored with knowledge of the model.
 - Spreadsheet and uncapacitated choices are scored here by the capacity-aware simulation, which is itself only a model.
 
-Ledger record: `experiment-38ae1a8c0102`
+Ledger record: `experiment-8510b6837cdf`

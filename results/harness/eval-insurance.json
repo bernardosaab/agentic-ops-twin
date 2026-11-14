@@ -1,0 +1,182 @@
+{
+ "pack_id": "insurance",
+ "cases": [
+  {
+   "id": "G1",
+   "kind": "golden",
+   "description": "High-risk change (automation, unvalidated twin), two acknowledging approvers: written and read back",
+   "expected": "release",
+   "actual": "release",
+   "system_of_record_unchanged": false,
+   "reasons": [],
+   "passed": true
+  },
+  {
+   "id": "G2",
+   "kind": "golden",
+   "description": "Same change with a validated twin: still high-risk (automation switch); two approvers release it",
+   "expected": "release",
+   "actual": "release",
+   "system_of_record_unchanged": false,
+   "reasons": [],
+   "passed": true
+  },
+  {
+   "id": "N1",
+   "kind": "negative",
+   "description": "No approval at all",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "0 valid distinct approval(s); 2 required for a high-risk package"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N2",
+   "kind": "negative",
+   "description": "High-risk package with a single approval",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "1 valid distinct approval(s); 2 required for a high-risk package"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N3",
+   "kind": "negative",
+   "description": "Maker approves their own package (maker-checker)",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "approval by ops-analyst: maker/requester cannot approve",
+    "1 valid distinct approval(s); 2 required for a high-risk package"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N4",
+   "kind": "negative",
+   "description": "Approvals with forged tokens",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "approval by approver-a: token does not verify",
+    "approval by approver-b: token does not verify",
+    "0 valid distinct approval(s); 2 required for a high-risk package"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N5",
+   "kind": "negative",
+   "description": "Approval tokens expired",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "approval by approver-a: token expired",
+    "approval by approver-b: token expired",
+    "0 valid distinct approval(s); 2 required for a high-risk package"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N6",
+   "kind": "negative",
+   "description": "Unvalidated twin, approvers did not acknowledge it",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "approval by approver-a: did not acknowledge unvalidated twin",
+    "approval by approver-b: did not acknowledge unvalidated twin",
+    "0 valid distinct approval(s); 2 required for a high-risk package"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N7",
+   "kind": "negative",
+   "description": "Trust gate: history shows mechanisms the twin omits",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "trust gate: twin is inadequate (release blocked: history shows mechanisms the twin omits (mean_handoff_gap_hours, idle_capacity_while_queued, peak_to_trough_hourly_arrivals))"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N8",
+   "kind": "negative",
+   "description": "Source brief invalidated after approval",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "source brief has been invalidated"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N9",
+   "kind": "negative",
+   "description": "System of record changed after the quote (stale before-state)",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "system of record changed since the quote (stale before-state)"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N10",
+   "kind": "negative",
+   "description": "One approver rejects",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "rejected by approver-b",
+    "1 valid distinct approval(s); 2 required for a high-risk package"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N11",
+   "kind": "negative",
+   "description": "Replaying an already-released package",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "package was already released",
+    "system of record changed since the quote (stale before-state)"
+   ],
+   "passed": true
+  },
+  {
+   "id": "N12",
+   "kind": "negative",
+   "description": "Request to remove a mandatory control never becomes a change set",
+   "expected": "refusal",
+   "actual": "refusal",
+   "system_of_record_unchanged": true,
+   "reasons": [
+    "control_locked"
+   ],
+   "passed": true
+  }
+ ],
+ "passed": 14,
+ "total": 14,
+ "reconstruction_pack_records": 9,
+ "reconstruction_chain_verified": true
+}

@@ -3,7 +3,7 @@
 **Status:** draft for named human review. Approval records a decision for discussion only; nothing is deployed.
 
 - Pack: `insurance`; model `insurance-claims` v1.0.0, digest `09db5f2dd908b6d4`
-- Evidence: ledger record `experiment-7a2d60c97332`
+- Evidence: ledger record `experiment-9029496dc044`
 - Narrative source: template-v1; grounding check: passed
 
 ## Summary
@@ -39,6 +39,13 @@ Under the `normal` condition, cost per case incl. SLA penalty is 165.47 [F2] ver
 | complex_mix | open cases at horizon | 15.6 | 9.6 | -6.00 (-10.87 to -1.13) | paired | alternative |
 | complex_mix | manual escalations | 0.0 | 220.9 | +220.90 (+216.06 to +225.74) | paired | reference |
 
+## What breaks when the demand assumption is wrong
+
+| Option | Demand headroom (rule still met) | First failing level | Binding constraint | Breaks first at |
+|---|---|---|---|---|
+| current operation | +12% | +14% | mean completion rate 0.948 < 0.95 | triage_officer |
+| variant:triage=automated, priority:queue_policy=high_value_first | +19% | +20% | mean completion rate 0.947 < 0.95 | adjuster |
+
 ## Constraint checks
 
 - normal: meets the decision rule (meets completion and SLA constraints on the mean)
@@ -57,6 +64,6 @@ Under the `normal` condition, cost per case incl. SLA penalty is 165.47 [F2] ver
 
 - Results are simulated counterfactuals conditional on the stated operating model and assumptions; they are not causal estimates or forecasts.
 - Parameters are synthetic and hand-authored; no real operational data was used or validated.
-- Approval of this brief records a decision for discussion only. Nothing is deployed and the prototype has no connection to live systems.
+- Reviewing this brief changes nothing. A change can reach the sandboxed system of record only through a separately staged, approved and verified change package; no live system is connected.
 
-Brief ledger record: `brief-281463bd1314`
+Brief ledger record: `brief-f9376861f947`

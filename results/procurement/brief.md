@@ -3,7 +3,7 @@
 **Status:** draft for named human review. Approval records a decision for discussion only; nothing is deployed.
 
 - Pack: `procurement`; model `procurement-exceptions` v1.0.0, digest `10a877ecc548dcd1`
-- Evidence: ledger record `experiment-00fdcefe3fab`
+- Evidence: ledger record `experiment-538947a93051`
 - Narrative source: template-v1; grounding check: passed
 
 ## Summary
@@ -39,6 +39,13 @@ Under the `normal` condition, cost per case incl. SLA penalty is 117.19 [F2] ver
 | receipt_heavy | open cases at horizon | 11.6 | 14.3 | +2.80 (+0.31 to +5.29) | paired | reference |
 | receipt_heavy | manual escalations | 0.0 | 215.4 | +215.40 (+208.73 to +222.07) | paired | reference |
 
+## What breaks when the demand assumption is wrong
+
+| Option | Demand headroom (rule still met) | First failing level | Binding constraint | Breaks first at |
+|---|---|---|---|---|
+| current operation | +22% | +23% | mean SLA attainment 0.845 < 0.85 | buyer |
+| capacity:ap_clerk=2, variant:classify=ml_assisted | +16% | +17% | mean SLA attainment 0.832 < 0.85 | ap_clerk |
+
 ## Constraint checks
 
 - normal: meets the decision rule (meets completion and SLA constraints on the mean)
@@ -56,6 +63,6 @@ Under the `normal` condition, cost per case incl. SLA penalty is 117.19 [F2] ver
 
 - Results are simulated counterfactuals conditional on the stated operating model and assumptions; they are not causal estimates or forecasts.
 - Parameters are synthetic and hand-authored; no real operational data was used or validated.
-- Approval of this brief records a decision for discussion only. Nothing is deployed and the prototype has no connection to live systems.
+- Reviewing this brief changes nothing. A change can reach the sandboxed system of record only through a separately staged, approved and verified change package; no live system is connected.
 
-Brief ledger record: `brief-07f49f0e1aba`
+Brief ledger record: `brief-ac4c00f253fb`

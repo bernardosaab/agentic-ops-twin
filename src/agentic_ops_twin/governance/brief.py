@@ -12,6 +12,8 @@ from typing import Literal, Protocol
 
 from pydantic import BaseModel, ConfigDict
 
+from agentic_ops_twin.decision.scenarios import ChangeSet
+from agentic_ops_twin.decision.stress import StressResult
 from agentic_ops_twin.decision.study import HeldOutRow
 from agentic_ops_twin.governance.grounding import Fact, GroundingResult, check_grounding
 from agentic_ops_twin.simulation.model import OperatingModel
@@ -31,8 +33,9 @@ STANDING_LIMITATIONS = (
     "Results are simulated counterfactuals conditional on the stated operating model and "
     "assumptions; they are not causal estimates or forecasts.",
     "Parameters are synthetic and hand-authored; no real operational data was used or validated.",
-    "Approval of this brief records a decision for discussion only. Nothing is deployed and the "
-    "prototype has no connection to live systems.",
+    "Reviewing this brief changes nothing. A change can reach the sandboxed system of record "
+    "only through a separately staged, approved and verified change package; no live system "
+    "is connected.",
 )
 
 
@@ -48,6 +51,8 @@ class Brief(BaseModel):
     narrative_grounding: GroundingResult
     rejected_narrative: str | None
     rejected_narrative_problems: list[str]
+    change_set: ChangeSet | None = None
+    stress: list[StressResult] = []
     markdown: str
 
 
@@ -177,6 +182,8 @@ def build_brief(
     baseline_rows: Sequence[HeldOutRow],
     extra_notes: Sequence[str] = (),
     narrator: Narrator | None = None,
+    change_set: ChangeSet | None = None,
+    stress: Sequence[StressResult] = (),
 ) -> Brief:
     facts = build_facts(rows, baseline_rows, source_record)
     template = TemplateNarrator(rows).narrate(facts)
@@ -238,6 +245,31 @@ def build_brief(
                 f"{_fmt(a, unit) if a is not None else 'n/a'} | {diff} | "
                 f"{d.method if d else 'n/a'} | {d.better if d else 'n/a'} |"
             )
+    if stress:
+        lines += [
+            "",
+            "## What breaks when the demand assumption is wrong",
+            "",
+            "| Option | Demand headroom (rule still met) | First failing level "
+            "| Binding constraint "
+            "| Breaks first at |",
+            "|---|---|---|---|---|",
+        ]
+        for st in stress:
+            head = (
+                "fails at current demand"
+                if st.headroom_multiplier is None
+                else (f"+{(st.headroom_multiplier - 1) * 100:.0f}%")
+            )
+            fail = (
+                "none up to the tested limit"
+                if st.first_failing_multiplier is None
+                else (f"+{(st.first_failing_multiplier - 1) * 100:.0f}%")
+            )
+            lines.append(
+                f"| {st.label} | {head} | {fail} | {st.binding_constraint or '—'} | "
+                f"{st.breaks_first_at or '—'} |"
+            )
     lines += ["", "## Constraint checks", ""]
     for row in rows:
         lines.append(
@@ -268,6 +300,8 @@ def build_brief(
         narrative_grounding=grounding,
         rejected_narrative=rejected,
         rejected_narrative_problems=rejected_problems,
+        change_set=change_set,
+        stress=list(stress),
         markdown="\n".join(lines) + "\n",
     )
 

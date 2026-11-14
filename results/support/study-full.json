@@ -27875,5 +27875,5 @@
   "held-out baseline normal vs surge_25: 20/20 arrival-stream digests differ; unpaired comparison"
  ],
  "simulated_replications": 2280,
- "runtime_seconds": 133.46
+ "runtime_seconds": 125.1
 }

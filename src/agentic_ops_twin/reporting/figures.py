@@ -468,6 +468,53 @@ def fig_downstream_shift(results: Path, out: Path, mode: str) -> Path:
     return _save(fig, out, "downstream-shift", mode)
 
 
+def fig_headroom(results: Path, out: Path, mode: str) -> Path:
+    t = THEMES[mode]
+    plt = _plt(t)
+    fig, ax = plt.subplots(figsize=(11, 3.6))
+    h = 0.34
+    for k, pack in enumerate(PACKS):
+        path = results / pack / "stress.json"
+        if not path.exists():
+            continue
+        stress = json.loads(path.read_text(encoding="utf-8"))
+        y = len(PACKS) - 1 - k
+        for off, st, color in (
+            (h / 2 + 0.03, stress[0], "neutral"),
+            (-h / 2 - 0.03, stress[1], "capacity"),
+        ):
+            head = st["headroom_multiplier"]
+            val = 0.0 if head is None else (head - 1) * 100
+            ax.barh(y + off, val, h, color=t[color], linewidth=0)
+            where = st["breaks_first_at"] or "nothing up to +100%"
+            text = (
+                "fails at current demand"
+                if head is None
+                else f"+{val:.0f}%  breaks first at {where.replace('_', ' ')}"
+            )
+            ax.text(max(val, 0) + 0.6, y + off, text, va="center", fontsize=8, color=t["text2"])
+    ax.set_yticks(range(len(PACKS)), [PACK_TITLE[p] for p in reversed(PACKS)])
+    ax.set_xlim(0, 45)
+    ax.set_xlabel("Extra demand absorbed while still meeting the decision rule (%)")
+    ax.grid(axis="y", visible=False)
+    handles = [
+        plt.Rectangle((0, 0), 1, 1, color=t["neutral"]),
+        plt.Rectangle((0, 0), 1, 1, color=t["capacity"]),
+    ]
+    ax.legend(
+        handles, ["Current operation", "Capacity-aware choice"], loc="lower right", fontsize=8.5
+    )
+    _title(
+        fig,
+        t,
+        "Cheaper can mean more fragile: demand headroom before the rule breaks",
+        "Bisection on the arrival multiplier (resolution ~1.6 pts), 6 held-out replications "
+        "per level; labels show the most utilised resource at the first failing level",
+    )
+    fig.subplots_adjust(top=0.78, bottom=0.16, left=0.16, right=0.99)
+    return _save(fig, out, "headroom", mode)
+
+
 def render_all(results: Path, out: Path) -> list[Path]:
     paths: list[Path] = []
     cache: dict[str, Any] = {}
@@ -477,4 +524,6 @@ def render_all(results: Path, out: Path) -> list[Path]:
         paths.append(fig_ranking_validity(results, out, mode))
         paths.append(fig_backlog(results, out, mode, cache))
         paths.append(fig_downstream_shift(results, out, mode))
+        if (results / "insurance" / "stress.json").exists():
+            paths.append(fig_headroom(results, out, mode))
     return paths

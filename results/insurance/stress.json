@@ -1,0 +1,182 @@
+[
+ {
+  "alternative": "baseline",
+  "label": "current operation",
+  "seeds": [
+   9000,
+   9001,
+   9002,
+   9003,
+   9004,
+   9005
+  ],
+  "headroom_multiplier": 1.125,
+  "first_failing_multiplier": 1.1406,
+  "binding_constraint": "mean completion rate 0.948 < 0.95",
+  "breaks_first_at": "triage_officer",
+  "points": [
+   {
+    "multiplier": 1.0,
+    "sla_attainment": 0.9809872978899544,
+    "completion_rate": 0.9809872978899544,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "triage_officer",
+    "max_utilisation": 0.8818683063245399
+   },
+   {
+    "multiplier": 1.125,
+    "sla_attainment": 0.9064333709938127,
+    "completion_rate": 0.9561970629593395,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "triage_officer",
+    "max_utilisation": 0.9840456829192492
+   },
+   {
+    "multiplier": 1.1406,
+    "sla_attainment": 0.8869336926198552,
+    "completion_rate": 0.9480493612006592,
+    "meets_rule": false,
+    "note": "mean completion rate 0.948 < 0.95",
+    "max_utilisation_resource": "triage_officer",
+    "max_utilisation": 0.9916906466241707
+   },
+   {
+    "multiplier": 1.1562,
+    "sla_attainment": 0.8739035639560231,
+    "completion_rate": 0.9381683033161824,
+    "meets_rule": false,
+    "note": "mean completion rate 0.938 < 0.95",
+    "max_utilisation_resource": "triage_officer",
+    "max_utilisation": 0.9957565068958377
+   },
+   {
+    "multiplier": 1.1875,
+    "sla_attainment": 0.8363440590310885,
+    "completion_rate": 0.9128472202619985,
+    "meets_rule": false,
+    "note": "mean completion rate 0.913 < 0.95",
+    "max_utilisation_resource": "triage_officer",
+    "max_utilisation": 0.9999975828664164
+   },
+   {
+    "multiplier": 1.25,
+    "sla_attainment": 0.5281827587448714,
+    "completion_rate": 0.8615618256544627,
+    "meets_rule": false,
+    "note": "mean completion rate 0.862 < 0.95",
+    "max_utilisation_resource": "triage_officer",
+    "max_utilisation": 1.0
+   },
+   {
+    "multiplier": 1.5,
+    "sla_attainment": 0.054576431038605565,
+    "completion_rate": 0.6912893120666498,
+    "meets_rule": false,
+    "note": "mean completion rate 0.691 < 0.95",
+    "max_utilisation_resource": "triage_officer",
+    "max_utilisation": 1.0000000000000002
+   },
+   {
+    "multiplier": 2.0,
+    "sla_attainment": 0.0,
+    "completion_rate": 0.4844907196502926,
+    "meets_rule": false,
+    "note": "mean completion rate 0.484 < 0.95",
+    "max_utilisation_resource": "triage_officer",
+    "max_utilisation": 0.9999999999999999
+   }
+  ]
+ },
+ {
+  "alternative": "alt-2-6-1-automated-high_value_first",
+  "label": "variant:triage=automated, priority:queue_policy=high_value_first",
+  "seeds": [
+   9000,
+   9001,
+   9002,
+   9003,
+   9004,
+   9005
+  ],
+  "headroom_multiplier": 1.1875,
+  "first_failing_multiplier": 1.2031,
+  "binding_constraint": "mean completion rate 0.947 < 0.95",
+  "breaks_first_at": "adjuster",
+  "points": [
+   {
+    "multiplier": 1.0,
+    "sla_attainment": 0.988600606537256,
+    "completion_rate": 0.988600606537256,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "adjuster",
+    "max_utilisation": 0.8529391864557869
+   },
+   {
+    "multiplier": 1.125,
+    "sla_attainment": 0.9780410576084488,
+    "completion_rate": 0.9792127221099213,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "adjuster",
+    "max_utilisation": 0.9592700480100883
+   },
+   {
+    "multiplier": 1.1875,
+    "sla_attainment": 0.9121904400151043,
+    "completion_rate": 0.9535420990026449,
+    "meets_rule": true,
+    "note": "meets completion and SLA constraints on the mean",
+    "max_utilisation_resource": "adjuster",
+    "max_utilisation": 0.9932206403040292
+   },
+   {
+    "multiplier": 1.2031,
+    "sla_attainment": 0.8973910274824005,
+    "completion_rate": 0.9465745825693873,
+    "meets_rule": false,
+    "note": "mean completion rate 0.947 < 0.95",
+    "max_utilisation_resource": "adjuster",
+    "max_utilisation": 0.9985404151532387
+   },
+   {
+    "multiplier": 1.2188,
+    "sla_attainment": 0.8661677234209785,
+    "completion_rate": 0.9339287630631802,
+    "meets_rule": false,
+    "note": "mean completion rate 0.934 < 0.95",
+    "max_utilisation_resource": "adjuster",
+    "max_utilisation": 0.9996637863697336
+   },
+   {
+    "multiplier": 1.25,
+    "sla_attainment": 0.7453841361236777,
+    "completion_rate": 0.9068139125340798,
+    "meets_rule": false,
+    "note": "mean completion rate 0.907 < 0.95",
+    "max_utilisation_resource": "adjuster",
+    "max_utilisation": 0.9997794480917563
+   },
+   {
+    "multiplier": 1.5,
+    "sla_attainment": 0.18946260726412475,
+    "completion_rate": 0.7298051092537156,
+    "meets_rule": false,
+    "note": "mean completion rate 0.730 < 0.95",
+    "max_utilisation_resource": "adjuster",
+    "max_utilisation": 1.0
+   },
+   {
+    "multiplier": 2.0,
+    "sla_attainment": 0.07839635899894155,
+    "completion_rate": 0.5078049828806007,
+    "meets_rule": false,
+    "note": "mean completion rate 0.508 < 0.95",
+    "max_utilisation_resource": "adjuster",
+    "max_utilisation": 0.9999999999999997
+   }
+  ]
+ }
+]

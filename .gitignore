@@ -14,3 +14,5 @@ results/datasets/
 site/
 .coverage
 coverage.xml
+# Local sandbox system of record and approval keys (never commit secrets)
+.ops-twin/

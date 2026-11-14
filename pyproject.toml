@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentic-ops-twin"
-version = "0.1.0"
+version = "0.2.0"
 description = "Capacity-aware operating-model simulation with governed, agent-assisted scenario analysis."
 readme = "README.md"
 requires-python = ">=3.11"

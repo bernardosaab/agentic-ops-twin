@@ -10,7 +10,7 @@ version-pinned.
 ```mermaid
 flowchart LR
     subgraph U["Untrusted"]
-        R["Operator request"] --> P["Proposer<br/>scripted fake or opt-in Claude"]
+        R["Operator request"] --> P["Compiled rules first<br/>skip, then model tier or human"]
     end
     subgraph T["Trusted, deterministic"]
         P -->|JSON| S["Schema validation"]
@@ -25,9 +25,15 @@ flowchart LR
         M --> D["Decision study<br/>search split, then held-out split"]
     end
     subgraph G["Governance"]
-        D --> LG[("Hash-chained ledger")]
-        LG --> B["Grounded brief"]
-        B --> H["Named human review<br/>no deployment"]
+        D --> LG[("Provenance graph<br/>bi-temporal, hash-chained")]
+        LG --> B["Grounded brief<br/>+ breaking-point stress test"]
+        B --> TG{"Model trust gate"}
+        TG -->|inadequate| BL["Blocked"]
+        TG --> W["Escrowed change package<br/>quote, risk tier, payload hash"]
+        W --> AP["Signed approvals<br/>maker-checker"]
+        AP --> RL{"Release checks"}
+        RL -->|any fails| RF["Refusal<br/>record unchanged"]
+        RL -->|all pass| SOR[("Sandboxed system of record<br/>write and read back")]
     end
 ```
 
@@ -36,10 +42,10 @@ flowchart LR
 | Subpackage | Modules | Responsibility |
 |---|---|---|
 | `simulation` | `model`, `validate`, `exogenous`, `engine`, `metrics`, `stats` | See [Simulation core](#simulation-core) below. |
-| `decision` | `scenarios`, `baselines`, `search`, `sensitivity`, `experiment`, `study` | See [Decision analysis](#decision-analysis) below. |
+| `decision` | `scenarios`, `baselines`, `search`, `sensitivity`, `stress`, `experiment`, `study` | See [Decision analysis](#decision-analysis) below. |
 | `packs` | `insurance`, `procurement`, `support`, `base`, `data/requests.json` | Three synthetic domain packs behind one `DomainPack` contract, plus the labelled agent requests. |
-| `agent` | `contracts`, `critic`, `loop`, `fake`, `anthropic_adapter`, `eval` | Proposal schema, the deterministic critic, the bounded four-state loop, the scripted fake, the opt-in Claude adapter, and the evaluation on labelled requests. |
-| `governance` | `ledger`, `brief`, `grounding` | Append-only hash-chained SQLite ledger, evidence-linked briefs, and the number-level grounding check. |
+| `agent` | `contracts`, `critic`, `loop`, `router`, `fake`, `anthropic_adapter`, `eval` | Proposal schema, the deterministic critic, the bounded loop, compiled-first routing with skips, tiers and shadow mode, the compiled rules, the opt-in Claude adapter, and the model and routing evaluations. |
+| `governance` | `ledger`, `brief`, `grounding`, `trust`, `writegate`, `harness_eval` | Bi-temporal provenance graph, grounded briefs, the model trust gate, the staged write-gate to a sandboxed system of record, and the harness evaluation (golden jobs and negative tests). |
 | `research` | `calibrate`, `selection`, `runner` | Calibration from logs with residual diagnostics, OCBA versus equal allocation, and the pre-registered studies. |
 | `reporting` | `study_report`, `research_report`, `figures` | Markdown reports and figures rendered only from stored results. |
 | top level | `cli`, `api` | The `ops-twin` CLI and a local FastAPI service that uses the scripted proposer only. |

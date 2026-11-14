@@ -3,7 +3,7 @@
 **Status:** draft for named human review. Approval records a decision for discussion only; nothing is deployed.
 
 - Pack: `support`; model `support-escalations` v1.0.0, digest `581d25fe15dde947`
-- Evidence: ledger record `experiment-38ae1a8c0102`
+- Evidence: ledger record `experiment-8510b6837cdf`
 - Narrative source: template-v1; grounding check: passed
 
 ## Summary
@@ -39,6 +39,13 @@ Under the `normal` condition, cost per case incl. SLA penalty is 93.78 [F2] vers
 | billing_spike | open cases at horizon | 79.2 | 372.1 | +292.95 (+272.40 to +313.50) | paired | reference |
 | billing_spike | manual escalations | 0.0 | 589.1 | +589.10 (+580.07 to +598.13) | paired | reference |
 
+## What breaks when the demand assumption is wrong
+
+| Option | Demand headroom (rule still met) | First failing level | Binding constraint | Breaks first at |
+|---|---|---|---|---|
+| current operation | +23% | +25% | mean SLA attainment 0.836 < 0.85 | tier2_agent |
+| capacity:tier1_agent=3, capacity:tier2_agent=6, variant:routing=auto_classify | +8% | +9% | mean SLA attainment 0.829 < 0.85 | tier2_agent |
+
 ## Constraint checks
 
 - normal: meets the decision rule (meets completion and SLA constraints on the mean)
@@ -55,6 +62,6 @@ Under the `normal` condition, cost per case incl. SLA penalty is 93.78 [F2] vers
 
 - Results are simulated counterfactuals conditional on the stated operating model and assumptions; they are not causal estimates or forecasts.
 - Parameters are synthetic and hand-authored; no real operational data was used or validated.
-- Approval of this brief records a decision for discussion only. Nothing is deployed and the prototype has no connection to live systems.
+- Reviewing this brief changes nothing. A change can reach the sandboxed system of record only through a separately staged, approved and verified change package; no live system is connected.
 
-Brief ledger record: `brief-2ab49bea5efd`
+Brief ledger record: `brief-eacc865a5e61`

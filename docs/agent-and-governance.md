@@ -86,7 +86,9 @@ Every brief states three things:
 - they are not causal estimates or forecasts;
 - nothing is deployed.
 
-## Ledger and review
+## Provenance and review
+
+See [The deterministic harness](harness.md) for the provenance graph, the trust gate and governed write-back.
 
 All of the following go into an append-only SQLite table (triggers block `UPDATE` and
 `DELETE`): requests, proposals, critiques, experiments, briefs, pre-registrations and reviews.

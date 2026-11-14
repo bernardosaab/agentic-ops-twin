@@ -47,6 +47,7 @@ nav:
   - Overview: index.md
   - Getting started: getting-started.md
   - How it works: architecture.md
+  - The deterministic harness: harness.md
   - Results: results.md
   - Agent and governance: agent-and-governance.md
   - Research:

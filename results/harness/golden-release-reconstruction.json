@@ -1,0 +1,1097 @@
+{
+ "schema": "reconstruction-pack-v1",
+ "target": "release-8cb0f29e2297",
+ "generated_at": "2026-11-14T19:57:38.631751+00:00",
+ "chain_verified": true,
+ "chain_problems": [],
+ "records": [
+  {
+   "record_id": "request-6f398fae5964",
+   "kind": "request",
+   "recorded_at": "2026-11-14T19:57:38.593192+00:00",
+   "valid_from": "2026-11-14T19:57:38.593192+00:00",
+   "edges": [],
+   "payload_sha256": "a73f806682fb46187d60650becce0507900eaecf05662cbe95b9dae5e6638829",
+   "record_hash": "6f398fae5964df45a3c21005f0ecd09a279d0b0ae9f75b0d77aa6af386672b32",
+   "payload": {
+    "pack": "insurance",
+    "text": "Automate triage under normal demand."
+   }
+  },
+  {
+   "record_id": "proposal-5ba3c5cea022",
+   "kind": "proposal",
+   "recorded_at": "2026-11-14T19:57:38.595720+00:00",
+   "valid_from": "2026-11-14T19:57:38.595720+00:00",
+   "edges": [
+    [
+     "derived_from",
+     "request-6f398fae5964"
+    ]
+   ],
+   "payload_sha256": "6017890ab6d57157a3e0922d52e58190c59708de4b39cf9db1763575683a2eba",
+   "record_hash": "5ba3c5cea02265cbafadefeaa304d203c84e589274ae52522da49355356f6b0e",
+   "payload": {
+    "decided_by": "scripted-fake-v1",
+    "outcome": {
+     "attempts": [
+      {
+       "critique": {
+        "change_set": {
+         "changes": [
+          {
+           "lever": "variant:triage",
+           "value": "automated"
+          }
+         ],
+         "name": "proposal:variant:triage=automated"
+        },
+        "demand_condition": "normal",
+        "issues": [],
+        "questions": [],
+        "repairable": false,
+        "status": "ok"
+       },
+       "error": null,
+       "index": 0,
+       "parse_issues": [],
+       "proposal": {
+        "changes": [
+         {
+          "lever": "variant:triage",
+          "value": "automated"
+         }
+        ],
+        "demand_condition": "normal",
+        "in_scope": true,
+        "pack_id": "insurance",
+        "rationale": "Scripted keyword mapping (not a model).",
+        "unknowns": []
+       },
+       "raw_text": "{\"pack_id\": \"insurance\", \"in_scope\": true, \"changes\": [{\"lever\": \"variant:triage\", \"value\": \"automated\"}], \"demand_condition\": \"normal\", \"unknowns\": [], \"rationale\": \"Scripted keyword mapping (not a model).\"}",
+       "usage": null
+      }
+     ],
+     "change_set": {
+      "changes": [
+       {
+        "lever": "variant:triage",
+        "value": "automated"
+       }
+      ],
+      "name": "proposal:variant:triage=automated"
+     },
+     "demand_condition": "normal",
+     "issues": [],
+     "pack_id": "insurance",
+     "proposer": "scripted-fake-v1",
+     "proposer_kind": "scripted",
+     "questions": [],
+     "request": "Automate triage under normal demand.",
+     "status": "ok"
+    },
+    "pack_id": "insurance",
+    "request": "Automate triage under normal demand.",
+    "route": [
+     {
+      "kind": "scripted",
+      "reason": "handled by compiled rules",
+      "status": "ok",
+      "tier": "compiled"
+     }
+    ],
+    "shadow": null,
+    "skip_reason": null,
+    "status": "ok"
+   }
+  },
+  {
+   "record_id": "experiment-c14ddb3c474d",
+   "kind": "experiment",
+   "recorded_at": "2026-11-14T19:57:38.598052+00:00",
+   "valid_from": "2026-11-14T19:57:38.598052+00:00",
+   "edges": [
+    [
+     "evaluates",
+     "proposal-5ba3c5cea022"
+    ]
+   ],
+   "payload_sha256": "d3e59a29db949862417ac93ca438ad406b7fb25586272f16aa43bd60e936a2e6",
+   "record_hash": "c14ddb3c474d90ad9b39c534b9c3d9288b176dd608225541a4ac588304405717",
+   "payload": {
+    "alternative": {
+     "alternative": "proposal:variant:triage=automated",
+     "condition": "normal",
+     "feasible": true,
+     "feasible_note": "meets completion and SLA constraints on the mean",
+     "label": "variant:triage=automated",
+     "roles": [
+      "proposal"
+     ],
+     "summary": {
+      "arrivals": {
+       "ci95_high": 1049.239994352966,
+       "ci95_low": 937.0933389803672,
+       "mean": 993.1666666666666,
+       "metric": "arrivals",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 53.43188810688489
+      },
+      "completed": {
+       "ci95_high": 1041.2573893269114,
+       "ci95_low": 924.0759440064219,
+       "mean": 982.6666666666666,
+       "metric": "completed",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 55.83069645514613
+      },
+      "completion_rate": {
+       "ci95_high": 0.9947009604335315,
+       "ci95_low": 0.9839013590972132,
+       "mean": 0.9893011597653724,
+       "metric": "completion_rate",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 0.005145432900196137
+      },
+      "cost_per_completion": {
+       "ci95_high": 175.82165211781114,
+       "ci95_low": 158.0721895661992,
+       "mean": 166.94692084200517,
+       "metric": "cost_per_completion",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 8.456670364926413
+      },
+      "cycle_median_hours": {
+       "ci95_high": 2.2810049038120397,
+       "ci95_low": 1.972697024406152,
+       "mean": 2.126850964109096,
+       "metric": "cycle_median_hours",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 0.14689222839641977
+      },
+      "cycle_p95_hours": {
+       "ci95_high": 6.519093269255436,
+       "ci95_low": 4.942900417029185,
+       "mean": 5.730996843142311,
+       "metric": "cycle_p95_hours",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 0.7509716614839174
+      },
+      "escalations": {
+       "ci95_high": 231.69938179397366,
+       "ci95_low": 207.63395153935966,
+       "mean": 219.66666666666666,
+       "metric": "escalations",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 11.465891446663303
+      },
+      "objective_cost_per_case": {
+       "ci95_high": 176.02953748533733,
+       "ci95_low": 157.94740916040567,
+       "mean": 166.9884733228715,
+       "metric": "objective_cost_per_case",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 8.61516782807372
+      },
+      "open": {
+       "ci95_high": 15.366032879985884,
+       "ci95_low": 5.633967120014115,
+       "mean": 10.5,
+       "metric": "open",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 4.636809247747852
+      },
+      "sla_attainment": {
+       "ci95_high": 0.9947009604335315,
+       "ci95_low": 0.9839013590972132,
+       "mean": 0.9893011597653724,
+       "metric": "sla_attainment",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 0.005145432900196137
+      },
+      "total_cost": {
+       "ci95_high": 165272.7335929949,
+       "ci95_low": 164815.89974033847,
+       "mean": 165044.31666666668,
+       "metric": "total_cost",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 217.65691734164886
+      },
+      "wip_at_horizon": {
+       "ci95_high": 15.366032879985884,
+       "ci95_low": 5.633967120014115,
+       "mean": 10.5,
+       "metric": "wip_at_horizon",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 4.636809247747852
+      }
+     },
+     "vs_baseline": {
+      "completion_rate": {
+       "better": "inconclusive",
+       "ci95_high": 0.02259078193496704,
+       "ci95_low": -0.00596305818413116,
+       "mean_difference": 0.008313861875417938,
+       "method": "paired",
+       "metric": "completion_rate",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "cost_per_completion": {
+       "better": "alternative",
+       "ci95_high": -17.66212573112689,
+       "ci95_low": -21.4430815505771,
+       "mean_difference": -19.552603640851995,
+       "method": "paired",
+       "metric": "cost_per_completion",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "cycle_median_hours": {
+       "better": "alternative",
+       "ci95_high": -0.029509062216655835,
+       "ci95_low": -3.0382211051280765,
+       "mean_difference": -1.5338650836723662,
+       "method": "paired",
+       "metric": "cycle_median_hours",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "cycle_p95_hours": {
+       "better": "inconclusive",
+       "ci95_high": 0.6746787330888027,
+       "ci95_low": -4.837838318054461,
+       "mean_difference": -2.0815797924828288,
+       "method": "paired",
+       "metric": "cycle_p95_hours",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "escalations": {
+       "better": "reference",
+       "ci95_high": 231.69938179397366,
+       "ci95_low": 207.63395153935966,
+       "mean_difference": 219.66666666666666,
+       "method": "paired",
+       "metric": "escalations",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "objective_cost_per_case": {
+       "better": "alternative",
+       "ci95_high": -18.900710111673895,
+       "ci95_low": -20.122076889211215,
+       "mean_difference": -19.511393500442555,
+       "method": "paired",
+       "metric": "objective_cost_per_case",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "open": {
+       "better": "inconclusive",
+       "ci95_high": 6.524563568775388,
+       "ci95_low": -24.191230235442056,
+       "mean_difference": -8.833333333333334,
+       "method": "paired",
+       "metric": "open",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "sla_attainment": {
+       "better": "inconclusive",
+       "ci95_high": 0.02259078193496704,
+       "ci95_low": -0.00596305818413116,
+       "mean_difference": 0.008313861875417938,
+       "method": "paired",
+       "metric": "sla_attainment",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      }
+     }
+    },
+    "baseline": {
+     "alternative": "baseline",
+     "condition": "normal",
+     "feasible": true,
+     "feasible_note": "meets completion and SLA constraints on the mean",
+     "label": "baseline",
+     "roles": [
+      "baseline"
+     ],
+     "summary": {
+      "arrivals": {
+       "ci95_high": 1049.239994352966,
+       "ci95_low": 937.0933389803672,
+       "mean": 993.1666666666666,
+       "metric": "arrivals",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 53.43188810688489
+      },
+      "completed": {
+       "ci95_high": 1018.225411915952,
+       "ci95_low": 929.4412547507147,
+       "mean": 973.8333333333334,
+       "metric": "completed",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 42.30090621566713
+      },
+      "completion_rate": {
+       "ci95_high": 0.9932462539975448,
+       "ci95_low": 0.968728341782364,
+       "mean": 0.9809872978899544,
+       "metric": "completion_rate",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 0.011681474919991712
+      },
+      "cost_per_completion": {
+       "ci95_high": 193.73168116612277,
+       "ci95_low": 179.26736779959157,
+       "mean": 186.49952448285717,
+       "metric": "cost_per_completion",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 6.891472338391718
+      },
+      "cycle_median_hours": {
+       "ci95_high": 5.262698885826815,
+       "ci95_low": 2.0587332097361086,
+       "mean": 3.6607160477814618,
+       "metric": "cycle_median_hours",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 1.5265184229917472
+      },
+      "cycle_p95_hours": {
+       "ci95_high": 11.174461321860308,
+       "ci95_low": 4.45069194938997,
+       "mean": 7.812576635625139,
+       "metric": "cycle_p95_hours",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 3.203516784095864
+      },
+      "escalations": {
+       "ci95_high": 0.0,
+       "ci95_low": 0.0,
+       "mean": 0.0,
+       "metric": "escalations",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 0.0
+      },
+      "objective_cost_per_case": {
+       "ci95_high": 196.12351659877456,
+       "ci95_low": 176.87621704785354,
+       "mean": 186.49986682331405,
+       "metric": "objective_cost_per_case",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 9.170309649874634
+      },
+      "open": {
+       "ci95_high": 33.13916340928069,
+       "ci95_low": 5.527503257385973,
+       "mean": 19.333333333333332,
+       "metric": "open",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 13.155480480266263
+      },
+      "sla_attainment": {
+       "ci95_high": 0.9932462539975448,
+       "ci95_low": 0.968728341782364,
+       "mean": 0.9809872978899544,
+       "metric": "sla_attainment",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 0.011681474919991712
+      },
+      "total_cost": {
+       "ci95_high": 184206.6509795696,
+       "ci95_low": 183882.71568709693,
+       "mean": 184044.68333333326,
+       "metric": "total_cost",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 154.33785558529195
+      },
+      "wip_at_horizon": {
+       "ci95_high": 33.13916340928069,
+       "ci95_low": 5.527503257385973,
+       "mean": 19.333333333333332,
+       "metric": "wip_at_horizon",
+       "n": 6,
+       "n_undefined": 0,
+       "sd": 13.155480480266263
+      }
+     },
+     "vs_baseline": {
+      "completion_rate": {
+       "better": "inconclusive",
+       "ci95_high": 0.0,
+       "ci95_low": 0.0,
+       "mean_difference": 0.0,
+       "method": "paired",
+       "metric": "completion_rate",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "cost_per_completion": {
+       "better": "inconclusive",
+       "ci95_high": 0.0,
+       "ci95_low": 0.0,
+       "mean_difference": 0.0,
+       "method": "paired",
+       "metric": "cost_per_completion",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "cycle_median_hours": {
+       "better": "inconclusive",
+       "ci95_high": 0.0,
+       "ci95_low": 0.0,
+       "mean_difference": 0.0,
+       "method": "paired",
+       "metric": "cycle_median_hours",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "cycle_p95_hours": {
+       "better": "inconclusive",
+       "ci95_high": 0.0,
+       "ci95_low": 0.0,
+       "mean_difference": 0.0,
+       "method": "paired",
+       "metric": "cycle_p95_hours",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "escalations": {
+       "better": "inconclusive",
+       "ci95_high": 0.0,
+       "ci95_low": 0.0,
+       "mean_difference": 0.0,
+       "method": "paired",
+       "metric": "escalations",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "objective_cost_per_case": {
+       "better": "inconclusive",
+       "ci95_high": 0.0,
+       "ci95_low": 0.0,
+       "mean_difference": 0.0,
+       "method": "paired",
+       "metric": "objective_cost_per_case",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "open": {
+       "better": "inconclusive",
+       "ci95_high": 0.0,
+       "ci95_low": 0.0,
+       "mean_difference": 0.0,
+       "method": "paired",
+       "metric": "open",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      },
+      "sla_attainment": {
+       "better": "inconclusive",
+       "ci95_high": 0.0,
+       "ci95_low": 0.0,
+       "mean_difference": 0.0,
+       "method": "paired",
+       "metric": "sla_attainment",
+       "n": 6,
+       "pairing_note": "all 6 arrival-stream digests verified identical"
+      }
+     }
+    },
+    "type": "proposal_experiment"
+   }
+  },
+  {
+   "record_id": "brief-2cfe2a526865",
+   "kind": "brief",
+   "recorded_at": "2026-11-14T19:57:38.601300+00:00",
+   "valid_from": "2026-11-14T19:57:38.601300+00:00",
+   "edges": [
+    [
+     "derived_from",
+     "experiment-c14ddb3c474d"
+    ]
+   ],
+   "payload_sha256": "a63c3b77d94402adf90d8099f70e9e28ff5f11d8bddbe0025645672c6aa2a670",
+   "record_hash": "2cfe2a5268659d808adacf00211f995d2331b058f89fb59dbd422b5563ac5e0c",
+   "payload": {
+    "brief": {
+     "change_set": {
+      "changes": [
+       {
+        "lever": "variant:triage",
+        "value": "automated"
+       }
+      ],
+      "name": "proposal:variant:triage=automated"
+     },
+     "facts": [
+      {
+       "display": "186.50",
+       "id": "F1",
+       "path": "heldout[normal][baseline].objective_cost_per_case.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "currency",
+       "value": 186.49986682331405
+      },
+      {
+       "display": "166.99",
+       "id": "F2",
+       "path": "heldout[normal][proposal:variant:triage=automated].objective_cost_per_case.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "currency",
+       "value": 166.9884733228715
+      },
+      {
+       "display": "-19.51",
+       "id": "F3",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.objective_cost_per_case.diff",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "currency",
+       "value": -19.511393500442555
+      },
+      {
+       "display": "-20.12",
+       "id": "F4",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.objective_cost_per_case.ci_low",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "currency",
+       "value": -20.122076889211215
+      },
+      {
+       "display": "-18.90",
+       "id": "F5",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.objective_cost_per_case.ci_high",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "currency",
+       "value": -18.900710111673895
+      },
+      {
+       "display": "186.50",
+       "id": "F6",
+       "path": "heldout[normal][baseline].cost_per_completion.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "currency",
+       "value": 186.49952448285717
+      },
+      {
+       "display": "166.95",
+       "id": "F7",
+       "path": "heldout[normal][proposal:variant:triage=automated].cost_per_completion.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "currency",
+       "value": 166.94692084200517
+      },
+      {
+       "display": "-19.55",
+       "id": "F8",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.cost_per_completion.diff",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "currency",
+       "value": -19.552603640851995
+      },
+      {
+       "display": "-21.44",
+       "id": "F9",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.cost_per_completion.ci_low",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "currency",
+       "value": -21.4430815505771
+      },
+      {
+       "display": "-17.66",
+       "id": "F10",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.cost_per_completion.ci_high",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "currency",
+       "value": -17.66212573112689
+      },
+      {
+       "display": "3.66",
+       "id": "F11",
+       "path": "heldout[normal][baseline].cycle_median_hours.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "hours",
+       "value": 3.6607160477814618
+      },
+      {
+       "display": "2.13",
+       "id": "F12",
+       "path": "heldout[normal][proposal:variant:triage=automated].cycle_median_hours.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "hours",
+       "value": 2.126850964109096
+      },
+      {
+       "display": "-1.53",
+       "id": "F13",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.cycle_median_hours.diff",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "hours",
+       "value": -1.5338650836723662
+      },
+      {
+       "display": "-3.04",
+       "id": "F14",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.cycle_median_hours.ci_low",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "hours",
+       "value": -3.0382211051280765
+      },
+      {
+       "display": "-0.03",
+       "id": "F15",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.cycle_median_hours.ci_high",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "hours",
+       "value": -0.029509062216655835
+      },
+      {
+       "display": "7.81",
+       "id": "F16",
+       "path": "heldout[normal][baseline].cycle_p95_hours.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "hours",
+       "value": 7.812576635625139
+      },
+      {
+       "display": "5.73",
+       "id": "F17",
+       "path": "heldout[normal][proposal:variant:triage=automated].cycle_p95_hours.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "hours",
+       "value": 5.730996843142311
+      },
+      {
+       "display": "-2.08",
+       "id": "F18",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.cycle_p95_hours.diff",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "hours",
+       "value": -2.0815797924828288
+      },
+      {
+       "display": "-4.84",
+       "id": "F19",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.cycle_p95_hours.ci_low",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "hours",
+       "value": -4.837838318054461
+      },
+      {
+       "display": "0.67",
+       "id": "F20",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.cycle_p95_hours.ci_high",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "hours",
+       "value": 0.6746787330888027
+      },
+      {
+       "display": "98.1%",
+       "id": "F21",
+       "path": "heldout[normal][baseline].completion_rate.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "share",
+       "value": 0.9809872978899544
+      },
+      {
+       "display": "98.9%",
+       "id": "F22",
+       "path": "heldout[normal][proposal:variant:triage=automated].completion_rate.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "share",
+       "value": 0.9893011597653724
+      },
+      {
+       "display": "0.8%",
+       "id": "F23",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.completion_rate.diff",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "share",
+       "value": 0.008313861875417938
+      },
+      {
+       "display": "-0.6%",
+       "id": "F24",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.completion_rate.ci_low",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "share",
+       "value": -0.00596305818413116
+      },
+      {
+       "display": "2.3%",
+       "id": "F25",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.completion_rate.ci_high",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "share",
+       "value": 0.02259078193496704
+      },
+      {
+       "display": "98.1%",
+       "id": "F26",
+       "path": "heldout[normal][baseline].sla_attainment.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "share",
+       "value": 0.9809872978899544
+      },
+      {
+       "display": "98.9%",
+       "id": "F27",
+       "path": "heldout[normal][proposal:variant:triage=automated].sla_attainment.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "share",
+       "value": 0.9893011597653724
+      },
+      {
+       "display": "0.8%",
+       "id": "F28",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.sla_attainment.diff",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "share",
+       "value": 0.008313861875417938
+      },
+      {
+       "display": "-0.6%",
+       "id": "F29",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.sla_attainment.ci_low",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "share",
+       "value": -0.00596305818413116
+      },
+      {
+       "display": "2.3%",
+       "id": "F30",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.sla_attainment.ci_high",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "share",
+       "value": 0.02259078193496704
+      },
+      {
+       "display": "19.3",
+       "id": "F31",
+       "path": "heldout[normal][baseline].open.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "cases",
+       "value": 19.333333333333332
+      },
+      {
+       "display": "10.5",
+       "id": "F32",
+       "path": "heldout[normal][proposal:variant:triage=automated].open.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "cases",
+       "value": 10.5
+      },
+      {
+       "display": "-8.8",
+       "id": "F33",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.open.diff",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "cases",
+       "value": -8.833333333333334
+      },
+      {
+       "display": "-24.2",
+       "id": "F34",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.open.ci_low",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "cases",
+       "value": -24.191230235442056
+      },
+      {
+       "display": "6.5",
+       "id": "F35",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.open.ci_high",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "cases",
+       "value": 6.524563568775388
+      },
+      {
+       "display": "0.0",
+       "id": "F36",
+       "path": "heldout[normal][baseline].escalations.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "cases",
+       "value": 0.0
+      },
+      {
+       "display": "219.7",
+       "id": "F37",
+       "path": "heldout[normal][proposal:variant:triage=automated].escalations.mean",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "cases",
+       "value": 219.66666666666666
+      },
+      {
+       "display": "219.7",
+       "id": "F38",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.escalations.diff",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "cases",
+       "value": 219.66666666666666
+      },
+      {
+       "display": "207.6",
+       "id": "F39",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.escalations.ci_low",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "cases",
+       "value": 207.63395153935966
+      },
+      {
+       "display": "231.7",
+       "id": "F40",
+       "path": "heldout[normal][proposal:variant:triage=automated].vs_baseline.escalations.ci_high",
+       "source_record": "experiment-c14ddb3c474d",
+       "unit": "cases",
+       "value": 231.69938179397366
+      }
+     ],
+     "markdown": "# Decision brief (draft): variant:triage=automated\n\n**Status:** draft for named human review. Approval records a decision for discussion only; nothing is deployed.\n\n- Pack: `insurance`; model `insurance-claims` v1.0.0, digest `09db5f2dd908b6d4`\n- Evidence: ledger record `experiment-c14ddb3c474d`\n- Narrative source: template-v1; grounding check: passed\n\n## Summary\n\nUnder the `normal` condition, cost per case incl. SLA penalty is 166.99 [F2] versus 186.50 [F1] for the baseline, lower than the baseline (an improvement); paired comparison. Under the `normal` condition, cost per completed case is 166.95 [F7] versus 186.50 [F6] for the baseline, lower than the baseline (an improvement); paired comparison. Under the `normal` condition, median cycle time (completed) is 2.13 [F12] versus 3.66 [F11] for the baseline, lower than the baseline (an improvement); paired comparison. Under the `normal` condition, p95 cycle time (completed) is 5.73 [F17] versus 7.81 [F16] for the baseline, with no clear difference from the baseline; paired comparison. Under the `normal` condition, completion rate is 98.9% [F22] versus 98.1% [F21] for the baseline, with no clear difference from the baseline; paired comparison. Under the `normal` condition, SLA attainment (open = miss) is 98.9% [F27] versus 98.1% [F26] for the baseline, with no clear difference from the baseline; paired comparison. These are simulated outcomes conditional on the stated assumptions.\n\n## Evidence table\n\n| Condition | Metric | Baseline | Alternative | Difference (95% CI) | Method | Verdict |\n|---|---|---|---|---|---|---|\n| normal | cost per case incl. SLA penalty | 186.50 | 166.99 | -19.51 (-20.12 to -18.90) | paired | alternative |\n| normal | cost per completed case | 186.50 | 166.95 | -19.55 (-21.44 to -17.66) | paired | alternative |\n| normal | median cycle time (completed) | 3.66 | 2.13 | -1.53 (-3.04 to -0.03) | paired | alternative |\n| normal | p95 cycle time (completed) | 7.81 | 5.73 | -2.08 (-4.84 to +0.67) | paired | inconclusive |\n| normal | completion rate | 98.1% | 98.9% | +0.8 pts (-0.6 pts to +2.3 pts) | paired | inconclusive |\n| normal | SLA attainment (open = miss) | 98.1% | 98.9% | +0.8 pts (-0.6 pts to +2.3 pts) | paired | inconclusive |\n| normal | open cases at horizon | 19.3 | 10.5 | -8.83 (-24.19 to +6.52) | paired | inconclusive |\n| normal | manual escalations | 0.0 | 219.7 | +219.67 (+207.63 to +231.70) | paired | reference |\n\n## Constraint checks\n\n- normal: meets the decision rule (meets completion and SLA constraints on the mean)\n\n## Assumptions\n\n- `ins-a1` (synthetic-hand-authored): Arrivals are stationary Poisson over operating hours; no calendar.\n- `ins-a2` (synthetic-hand-authored): Automated triage sends 22% of claims to adjuster review (fallout).\n- `ins-a3` (synthetic-hand-authored): 8% of assessments need one more assessment pass (at most two extra).\n- `ins-a4` (synthetic-hand-authored): Staff are always available; no absenteeism or handoff delay.\n- `ins-a5` (synthetic-hand-authored): SLA miss penalty of 40 per case represents customer and rework cost.\n\n## Limitations\n\n- Results are simulated counterfactuals conditional on the stated operating model and assumptions; they are not causal estimates or forecasts.\n- Parameters are synthetic and hand-authored; no real operational data was used or validated.\n- Reviewing this brief changes nothing. A change can reach the sandboxed system of record only through a separately staged, approved and verified change package; no live system is connected.\n",
+     "model_digest": "09db5f2dd908b6d4b472c89f33e38c35ebd9d98eef57b2086b2ad02a5b7031e8",
+     "narrative": "Under the `normal` condition, cost per case incl. SLA penalty is 166.99 [F2] versus 186.50 [F1] for the baseline, lower than the baseline (an improvement); paired comparison. Under the `normal` condition, cost per completed case is 166.95 [F7] versus 186.50 [F6] for the baseline, lower than the baseline (an improvement); paired comparison. Under the `normal` condition, median cycle time (completed) is 2.13 [F12] versus 3.66 [F11] for the baseline, lower than the baseline (an improvement); paired comparison. Under the `normal` condition, p95 cycle time (completed) is 5.73 [F17] versus 7.81 [F16] for the baseline, with no clear difference from the baseline; paired comparison. Under the `normal` condition, completion rate is 98.9% [F22] versus 98.1% [F21] for the baseline, with no clear difference from the baseline; paired comparison. Under the `normal` condition, SLA attainment (open = miss) is 98.9% [F27] versus 98.1% [F26] for the baseline, with no clear difference from the baseline; paired comparison. These are simulated outcomes conditional on the stated assumptions.",
+     "narrative_grounding": {
+      "grounded": true,
+      "problems": []
+     },
+     "narrative_source": "template-v1",
+     "pack_id": "insurance",
+     "rejected_narrative": null,
+     "rejected_narrative_problems": [],
+     "source_record": "experiment-c14ddb3c474d",
+     "stress": [],
+     "subject": "variant:triage=automated"
+    }
+   }
+  },
+  {
+   "record_id": "trust_assessment-b6c587dd7f11",
+   "kind": "trust_assessment",
+   "recorded_at": "2026-11-14T19:57:38.603320+00:00",
+   "valid_from": "2026-11-14T19:57:38.603320+00:00",
+   "edges": [],
+   "payload_sha256": "d40cefed6a53403d9c8f41209674f0b2b5e86e1762da8485eb9ab54150e6d351",
+   "record_hash": "b6c587dd7f1199ad948c59c9aa5efa2a7d8e765abb0518eb283c7403b8274057",
+   "payload": {
+    "diagnostics": [],
+    "effect": "release requires the high-risk path and explicit acknowledgement by every approver",
+    "evidence": "no observed history assessed",
+    "history_hours": null,
+    "model_digest": "09db5f2dd908b6d4b472c89f33e38c35ebd9d98eef57b2086b2ad02a5b7031e8",
+    "model_id": "insurance-claims",
+    "status": "unvalidated"
+   }
+  },
+  {
+   "record_id": "change_package-3a9f1d7a694c",
+   "kind": "change_package",
+   "recorded_at": "2026-11-14T19:57:38.609102+00:00",
+   "valid_from": "2026-11-14T19:57:38.609102+00:00",
+   "edges": [
+    [
+     "derived_from",
+     "brief-2cfe2a526865"
+    ],
+    [
+     "assessed_by",
+     "trust_assessment-b6c587dd7f11"
+    ]
+   ],
+   "payload_sha256": "532fc06ca526a2ed807e0665a7380e31ecefe3dbfbdad0384ed65a8025083ff8",
+   "record_hash": "3a9f1d7a694c07d8036f62c93af09b9515964ba918bcf0ec0e560e90779cd9d3",
+   "payload": {
+    "package": {
+     "after": {
+      "capacities": {
+       "adjuster": 6,
+       "fraud_analyst": 1,
+       "intake_clerk": 2,
+       "payments_system": 2,
+       "senior_approver": 1,
+       "triage_model": 4,
+       "triage_officer": 2
+      },
+      "queue_policy": "fifo",
+      "variants": {
+       "assessment": "manual",
+       "fraud_check": "manual",
+       "intake": "manual",
+       "manual_review": "manual",
+       "senior_approval": "manual",
+       "settlement": "auto",
+       "triage": "automated"
+      }
+     },
+     "before": {
+      "capacities": {
+       "adjuster": 6,
+       "fraud_analyst": 1,
+       "intake_clerk": 2,
+       "payments_system": 2,
+       "senior_approver": 1,
+       "triage_model": 4,
+       "triage_officer": 2
+      },
+      "queue_policy": "fifo",
+      "variants": {
+       "assessment": "manual",
+       "fraud_check": "manual",
+       "intake": "manual",
+       "manual_review": "manual",
+       "senior_approval": "manual",
+       "settlement": "auto",
+       "triage": "manual"
+      }
+     },
+     "brief_record": "brief-2cfe2a526865",
+     "change_set": {
+      "changes": [
+       {
+        "lever": "variant:triage",
+        "value": "automated"
+       }
+      ],
+      "name": "proposal:variant:triage=automated"
+     },
+     "field_diff": [
+      {
+       "after": "automated",
+       "before": "manual",
+       "field": "variants.triage"
+      }
+     ],
+     "maker": "ops-analyst",
+     "model_digest": "09db5f2dd908b6d4b472c89f33e38c35ebd9d98eef57b2086b2ad02a5b7031e8",
+     "model_id": "insurance-claims",
+     "pack_id": "insurance",
+     "required_approvals": 2,
+     "risk_reasons": [
+      "switches 'triage' to automation",
+      "staffed cost changes by -10.6%",
+      "twin is unvalidated against observed history"
+     ],
+     "risk_tier": "high",
+     "staffed_cost_after": 574.0,
+     "staffed_cost_before": 642.0,
+     "target": "sandbox-system-of-record",
+     "trust_record": "trust_assessment-b6c587dd7f11",
+     "trust_status": "unvalidated"
+    },
+    "payload_sha256": "bf3a13dea6f792a9ecc0ea757426306c31430488041fc10dc2fe65eb7546856e",
+    "status": "escrowed"
+   }
+  },
+  {
+   "record_id": "approval-41c960dbaab4",
+   "kind": "approval",
+   "recorded_at": "2026-11-14T19:57:38.617278+00:00",
+   "valid_from": "2026-11-14T19:57:38.617278+00:00",
+   "edges": [
+    [
+     "approves",
+     "change_package-3a9f1d7a694c"
+    ]
+   ],
+   "payload_sha256": "55542a9f113d4f5fbf16687f6cba4d11f09fc8e0f79eadf9effda91ab5c1eb23",
+   "record_hash": "41c960dbaab46566e86b1c4c8c084e35767a58a9193a547babb40b9123bac117",
+   "payload": {
+    "acknowledged_unvalidated": true,
+    "decision": "approve",
+    "expires_at": "2026-11-15T19:57:38+00:00",
+    "identity": "local HMAC key (illustrative, not authenticated)",
+    "note": "",
+    "package": "change_package-3a9f1d7a694c",
+    "payload_sha256": "bf3a13dea6f792a9ecc0ea757426306c31430488041fc10dc2fe65eb7546856e",
+    "reviewer": "approver-a",
+    "token": "143c7e4eea44bd31dace0f8a7216f181b73094f9feff3cdf5f047241df59862f"
+   }
+  },
+  {
+   "record_id": "approval-73489c2850f7",
+   "kind": "approval",
+   "recorded_at": "2026-11-14T19:57:38.619801+00:00",
+   "valid_from": "2026-11-14T19:57:38.619801+00:00",
+   "edges": [
+    [
+     "approves",
+     "change_package-3a9f1d7a694c"
+    ]
+   ],
+   "payload_sha256": "4c406dbd3f13e8619116accc28954d7e3ebe8915f5e3724b13ac96e89b2e1ccb",
+   "record_hash": "73489c2850f74c3d6ba029e2690e0cdfe4f09874b7a231d930387a3a84b47eaf",
+   "payload": {
+    "acknowledged_unvalidated": true,
+    "decision": "approve",
+    "expires_at": "2026-11-15T19:57:38+00:00",
+    "identity": "local HMAC key (illustrative, not authenticated)",
+    "note": "",
+    "package": "change_package-3a9f1d7a694c",
+    "payload_sha256": "bf3a13dea6f792a9ecc0ea757426306c31430488041fc10dc2fe65eb7546856e",
+    "reviewer": "approver-b",
+    "token": "78be5a45eebbf2130dfac0f9c81c21d0be6d34a66b678e0906c09a578a1b80ad"
+   }
+  },
+  {
+   "record_id": "release-8cb0f29e2297",
+   "kind": "release",
+   "recorded_at": "2026-11-14T19:57:38.626197+00:00",
+   "valid_from": "2026-11-14T19:57:38.626197+00:00",
+   "edges": [
+    [
+     "releases",
+     "change_package-3a9f1d7a694c"
+    ],
+    [
+     "authorised_by",
+     "approval-41c960dbaab4"
+    ],
+    [
+     "authorised_by",
+     "approval-73489c2850f7"
+    ]
+   ],
+   "payload_sha256": "089eaa60fc107763040781bb8e5484e5900c510f078b0bc13c7559b43aaab6e9",
+   "record_hash": "8cb0f29e2297906c5c26fe7a8d0addfc5088124b73fcfc0245d8f9413bc93618",
+   "payload": {
+    "note": "sandboxed system of record only; no live system is connected",
+    "package": "change_package-3a9f1d7a694c",
+    "read_back_matches": true,
+    "requester": "ops-analyst",
+    "target": "sandbox-system-of-record",
+    "written": [
+     {
+      "after": "automated",
+      "before": "manual",
+      "field": "variants.triage"
+     }
+    ]
+   }
+  }
+ ],
+ "invalidations": []
+}

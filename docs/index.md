@@ -34,6 +34,8 @@ mandatory controls out of reach of any optimiser or AI proposal.
 - **Untrusted AI proposals.** A deterministic critic validates each proposal and asks questions
   rather than guessing. Briefs are grounded so every number cites a stored result, and each
   brief goes to a named human for review.
+- **Governed change.** A model trust gate, escrowed change packages, signed approvals with maker-checker, fail-closed release with read-back to a sandboxed system of record, and a bi-temporal provenance graph with reconstruction packs. See [The deterministic harness](harness.md).
+- **Stress tests.** Demand headroom, and which resource breaks first, for every recommendation.
 - **Pre-registered research.** A hidden-truth validation study, budgeted selection, and
   robustness to parameter uncertainty.
 
