@@ -392,11 +392,17 @@ See [docs/assumptions-and-limitations.md](docs/assumptions-and-limitations.md).
 
 ## Roadmap
 
-- One measured real-model routing evaluation on the held-out requests, with recorded usage and
-  cost.
-- Promotion of shadow-mode agreements into compiled rules, with a reviewed rule diff.
-- Decision rules on interval bounds; shifts, calendars and abandonment in the engine.
-- More hidden-truth families, and a fourth domain pack held out from development.
+Open implementation points are tracked in [ROADMAP.md](ROADMAP.md) and as
+[GitHub issues](https://github.com/bernardosaab/agentic-ops-twin/issues?q=is%3Aissue+label%3Aroadmap).
+The main remaining credibility gaps are:
+
+1. **A measured real-model evaluation.** No real-model result exists yet; a run costs about one
+   cent.
+2. **Authenticated approval identities.** Today's local HMAC keys are illustrative; the plan is
+   Ed25519 signatures with a public-key registry.
+3. **A connector to a staging system of record.** Today the system of record is a local sandbox.
+4. **Baseline validation against a licensed public event log.** All three packs are synthetic
+   today.
 
 ## Contributing, security and citation
 
