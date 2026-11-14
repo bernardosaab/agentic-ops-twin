@@ -5,11 +5,11 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from throughline.core.engine import simulate
-from throughline.core.exogenous import arrival_stream
-from throughline.packs import get_pack
-from throughline.research.calibrate import calibrate
-from throughline.research.selection import ocba_fractions, pcs
+from agentic_ops_twin.packs import get_pack
+from agentic_ops_twin.research.calibrate import calibrate
+from agentic_ops_twin.research.selection import ocba_fractions, pcs
+from agentic_ops_twin.simulation.engine import simulate
+from agentic_ops_twin.simulation.exogenous import arrival_stream
 
 HOURS = 960.0
 

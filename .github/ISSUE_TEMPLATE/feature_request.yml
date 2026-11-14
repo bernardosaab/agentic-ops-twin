@@ -1,0 +1,14 @@
+name: Feature or research proposal
+description: Propose a capability, domain pack or experiment
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or research question
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: How would we know it works? (tests, metrics, baselines)

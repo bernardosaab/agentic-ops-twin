@@ -2,10 +2,10 @@
 
 All data is synthetic. Nothing is derived from real organisations.
 
-## Domain packs (`src/throughline/packs/*.py`, generator `packs-v1`)
+## Domain packs (`src/agentic_ops_twin/packs/*.py`, generator `packs-v1`)
 
 Parameters are hand-authored in Python modules. These are the source of truth, and
-`throughline dataset --pack <id>` exports a pack as JSON. Each pack declares:
+`ops-twin dataset --pack <id>` exports a pack as JSON. Each pack declares:
 - an operating model (version `1.0.0`);
 - a bounded decision space and a staffed-cost budget;
 - a pre-declared decision rule;
@@ -30,7 +30,7 @@ Arrivals, case values, service-time uniforms and routing uniforms are pure funct
 event log as CSV:
 
 ```bash
-throughline dataset --pack insurance --seed 1000 --condition normal
+ops-twin dataset --pack insurance --seed 1000 --condition normal
 ```
 
 ## Seeds and splits

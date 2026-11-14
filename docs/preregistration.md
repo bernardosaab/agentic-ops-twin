@@ -1,6 +1,6 @@
 # Pre-registration: research studies (v1)
 
-Written before running the research studies. `throughline research` hashes this file (SHA-256)
+Written before running the research studies. `ops-twin research` hashes this file (SHA-256)
 into the evidence ledger before it runs anything, and the results report quotes that hash. If
 this file changes, the hash changes and earlier results no longer match it.
 

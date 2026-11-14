@@ -3,7 +3,7 @@
 **Status:** draft for named human review. Approval records a decision for discussion only; nothing is deployed.
 
 - Pack: `support`; model `support-escalations` v1.0.0, digest `581d25fe15dde947`
-- Evidence: ledger record `experiment-ebc55a0caf49`
+- Evidence: ledger record `experiment-38ae1a8c0102`
 - Narrative source: template-v1; grounding check: passed
 
 ## Summary
@@ -57,4 +57,4 @@ Under the `normal` condition, cost per case incl. SLA penalty is 93.78 [F2] vers
 - Parameters are synthetic and hand-authored; no real operational data was used or validated.
 - Approval of this brief records a decision for discussion only. Nothing is deployed and the prototype has no connection to live systems.
 
-Brief ledger record: `brief-08322dc955a8`
+Brief ledger record: `brief-2ab49bea5efd`

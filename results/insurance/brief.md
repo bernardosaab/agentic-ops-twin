@@ -3,7 +3,7 @@
 **Status:** draft for named human review. Approval records a decision for discussion only; nothing is deployed.
 
 - Pack: `insurance`; model `insurance-claims` v1.0.0, digest `09db5f2dd908b6d4`
-- Evidence: ledger record `experiment-758bf809759b`
+- Evidence: ledger record `experiment-7a2d60c97332`
 - Narrative source: template-v1; grounding check: passed
 
 ## Summary
@@ -59,4 +59,4 @@ Under the `normal` condition, cost per case incl. SLA penalty is 165.47 [F2] ver
 - Parameters are synthetic and hand-authored; no real operational data was used or validated.
 - Approval of this brief records a decision for discussion only. Nothing is deployed and the prototype has no connection to live systems.
 
-Brief ledger record: `brief-f1d6e824a4d6`
+Brief ledger record: `brief-281463bd1314`

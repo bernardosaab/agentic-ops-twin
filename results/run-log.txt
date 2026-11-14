@@ -1,31 +1,41 @@
 wrote results\insurance\study-full.json
 wrote results\insurance\study-full.md
-insurance: selections {'spreadsheet': 'alt-2-6-1-automated-fifo', 'uncapacitated_sim': 'alt-2-5-1-automated-fifo', 'capacity_aware_sim': 'alt-2-6-1-automated-high_value_first'}; ledger record experiment-758bf809759b
+insurance: selections {'spreadsheet': 'alt-2-6-1-automated-fifo', 'uncapacitated_sim': 'alt-2-5-1-automated-fifo', 'capacity_aware_sim': 'alt-2-6-1-automated-high_value_first'}; ledger record experiment-7a2d60c97332
 wrote results\procurement\study-full.json
 wrote results\procurement\study-full.md
-procurement: selections {'spreadsheet': 'alt-2-3-1-ml_assisted-fifo', 'uncapacitated_sim': 'alt-2-3-1-manual-fifo', 'capacity_aware_sim': 'alt-2-3-1-ml_assisted-fifo'}; ledger record experiment-16c8254d6e50
+procurement: selections {'spreadsheet': 'alt-2-3-1-ml_assisted-fifo', 'uncapacitated_sim': 'alt-2-3-1-manual-fifo', 'capacity_aware_sim': 'alt-2-3-1-ml_assisted-fifo'}; ledger record experiment-00fdcefe3fab
 wrote results\support\study-full.json
 wrote results\support\study-full.md
-support: selections {'spreadsheet': 'alt-3-6-4-auto_classify-fifo', 'uncapacitated_sim': 'alt-3-6-3-manual-fifo', 'capacity_aware_sim': 'alt-3-6-4-auto_classify-fifo'}; ledger record experiment-ebc55a0caf49
-insurance: H1=True H2=False H3=True (78.6 s); wrote results\insurance\research.json
-procurement: H1=True H2=False H3=True (69.1 s); wrote results\procurement\research.json
-support: H1=False H2=False H3=False (153.9 s); wrote results\support\research.json
+support: selections {'spreadsheet': 'alt-3-6-4-auto_classify-fifo', 'uncapacitated_sim': 'alt-3-6-3-manual-fifo', 'capacity_aware_sim': 'alt-3-6-4-auto_classify-fifo'}; ledger record experiment-38ae1a8c0102
+insurance: H1=True H2=False H3=True (76.3 s); wrote results\insurance\research.json
+procurement: H1=True H2=False H3=True (91.1 s); wrote results\procurement\research.json
+support: H1=False H2=False H3=False (128.9 s); wrote results\support\research.json
 wrote results\research.md
 wrote results\agent\eval-fake.json
 wrote results\agent\eval-fake.md
 scripted-fake-v1: 35/36
 wrote results\insurance\brief.md
-brief brief-f1d6e824a4d6 (grounded: True); review with:
-  throughline review --brief brief-f1d6e824a4d6 --reviewer <name> --decision approve
+brief brief-281463bd1314 (grounded: True); review with:
+  ops-twin review --brief brief-281463bd1314 --reviewer <name> --decision approve
 wrote results\procurement\brief.md
-brief brief-3625323836c4 (grounded: True); review with:
-  throughline review --brief brief-3625323836c4 --reviewer <name> --decision approve
+brief brief-07f49f0e1aba (grounded: True); review with:
+  ops-twin review --brief brief-07f49f0e1aba --reviewer <name> --decision approve
 wrote results\support\brief.md
-brief brief-08322dc955a8 (grounded: True); review with:
-  throughline review --brief brief-08322dc955a8 --reviewer <name> --decision approve
+brief brief-2ab49bea5efd (grounded: True); review with:
+  ops-twin review --brief brief-2ab49bea5efd --reviewer <name> --decision approve
 exported 1110 arrivals and 4678 events to results\datasets
 ledger chain verified
+wrote docs\assets\figures\decision-quality-light.svg
+wrote docs\assets\figures\calibrated-but-wrong-light.svg
+wrote docs\assets\figures\ranking-validity-light.svg
+wrote docs\assets\figures\backlog-surge-light.svg
+wrote docs\assets\figures\downstream-shift-light.svg
+wrote docs\assets\figures\decision-quality-dark.svg
+wrote docs\assets\figures\calibrated-but-wrong-dark.svg
+wrote docs\assets\figures\ranking-validity-dark.svg
+wrote docs\assets\figures\backlog-surge-dark.svg
+wrote docs\assets\figures\downstream-shift-dark.svg
 
-real	9m40.369s
+real	9m28.057s
 user	0m0.015s
-sys	0m0.090s
+sys	0m0.045s

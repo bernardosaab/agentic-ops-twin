@@ -11,3 +11,6 @@ build/
 results/*.sqlite
 results/datasets/
 .env
+site/
+.coverage
+coverage.xml

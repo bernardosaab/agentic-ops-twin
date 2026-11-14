@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Agentic Ops Twin: capacity-aware operating-model simulation with governed AI proposals"
+version: 0.1.0
+date-released: 2026-11-14
+license: MIT
+repository-code: "https://github.com/bernardosaab/agentic-ops-twin"
+authors:
+  - name: "Agentic Ops Twin contributors"
+keywords:
+  - discrete-event simulation
+  - digital twin
+  - operations research
+  - simpy
+  - ai governance

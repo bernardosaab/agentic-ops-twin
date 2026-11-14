@@ -1,0 +1,27 @@
+name: Bug report
+description: Something produced a wrong result, crashed, or let an invalid scenario through
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Exact command(s), pack and seed
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit, and Python version
+  - type: checkboxes
+    id: controls
+    attributes:
+      label: Control safety
+      options:
+        - label: This involves a mandatory control being bypassed, removed or automated

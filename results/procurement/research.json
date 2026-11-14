@@ -630,6 +630,6 @@
   "h3_supported": true,
   "h3_basis": "neither choice meets the decision rule in truth; compared on truth objective only"
  },
- "runtime_seconds": 69.1,
- "ledger_record": "experiment-bc0702bff02b"
+ "runtime_seconds": 91.1,
+ "ledger_record": "experiment-db0cd8efd7cd"
 }

@@ -7,8 +7,8 @@ import math
 import pytest
 from factories import single_queue
 
-from throughline.core.engine import simulate
-from throughline.core.stats import estimate
+from agentic_ops_twin.simulation.engine import simulate
+from agentic_ops_twin.simulation.stats import estimate
 
 
 def erlang_c_wait(lam: float, mu: float, c: int) -> float:

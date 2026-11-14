@@ -5,12 +5,12 @@ from __future__ import annotations
 import json
 from typing import Any, Literal
 
-from throughline.agent.contracts import ProposerOutput
-from throughline.agent.critic import parse_proposal
-from throughline.agent.eval import evaluate
-from throughline.agent.fake import FakeProposer
-from throughline.agent.loop import BudgetExhausted, run_proposal
-from throughline.packs import get_pack
+from agentic_ops_twin.agent.contracts import ProposerOutput
+from agentic_ops_twin.agent.critic import parse_proposal
+from agentic_ops_twin.agent.eval import evaluate
+from agentic_ops_twin.agent.fake import FakeProposer
+from agentic_ops_twin.agent.loop import BudgetExhausted, run_proposal
+from agentic_ops_twin.packs import get_pack
 
 
 class Scripted:

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from throughline.core.model import OperatingModel
+from agentic_ops_twin.simulation.model import OperatingModel
 
 
 def single_queue(

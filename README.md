@@ -1,298 +1,368 @@
-# Throughline
+<div align="center">
+
+# Agentic Ops Twin
 
 **Capacity-aware operating-model simulation with governed, agent-assisted scenario analysis.**
 
-AI can speed up one step of a process while shifting work into another queue. Throughline
-models individual cases competing for finite staff and automation capacity. It compares
-permitted operating changes under explicit assumptions and asks a harder question than
-"which option looks best?": *would this advice survive the mechanisms the model leaves out?*
+Test what really happens when you add staff, automate a step or change a queue rule, before
+anyone touches a live system.
 
-It is an **offline simulation prototype**, not a live digital twin.
-- It uses synthetic data only.
-- It never changes any live system.
-- Every result is conditional on a stated model. Results are not causal estimates or forecasts.
+[![CI](https://github.com/bernardosaab/agentic-ops-twin/actions/workflows/ci.yml/badge.svg)](https://github.com/bernardosaab/agentic-ops-twin/actions/workflows/ci.yml)
+[![Docs](https://github.com/bernardosaab/agentic-ops-twin/actions/workflows/pages.yml/badge.svg)](https://bernardosaab.github.io/agentic-ops-twin/)
+![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-3776ab)
+![Coverage](https://img.shields.io/badge/coverage-88%25-2a78d6)
+![Types](https://img.shields.io/badge/mypy-strict%20core-2a78d6)
+[![Ruff](https://img.shields.io/badge/lint-ruff-261230)](https://github.com/astral-sh/ruff)
+[![License: MIT](https://img.shields.io/badge/license-MIT-8a8984)](LICENSE)
 
-## What it does
+[Documentation](https://bernardosaab.github.io/agentic-ops-twin/) ·
+[Results](#results) ·
+[Quick start](#quick-start) ·
+[How it works](#how-it-works) ·
+[Limitations](#scope-and-limitations)
 
-1. **Typed operating models.** Pydantic contracts describe case types, Poisson arrivals, case
-   values, finite resources, service-time distributions, explicit routing with bounded rework,
-   costs, an SLA and a finite horizon. Missing or inconsistent assumptions are **rejected**,
-   never filled in.
-2. **Mandatory controls that optimisation cannot remove.** A graph proof checks that every
-   applicable path passes each control step, and control steps must be performed by humans. No
-   lever type can address a control, and every changed model is re-proved. A test replays
-   event logs to confirm that every simulated case requiring a control visited it.
-3. **A SimPy engine.** Each case is a process queuing for pooled servers. The run stops at the
-   horizon with open work counted, never dropped. Each replication reports:
-   - arrivals, completions, open cases (queued, in service or in handoff) and backlog;
-   - utilisation, cost, cost per completion and escalations;
-   - median and p95 cycle time of *completed* cases, always shown next to completion rate and
-     SLA attainment.
-4. **Verified pairing.** Random inputs are counter-based, so a draw for a given case, step and
-   visit is identical across branches whatever order events happen in. Every replication
-   publishes an arrival-stream digest. Comparisons are paired only when the digests match;
-   otherwise they use Welch intervals and say so.
-5. **A decision study per pack.**
-   - Every permitted lever combination is enumerated, with budget, bounds and controls
-     enforced and equivalent configurations collapsed.
-   - Each one is scored three ways: spreadsheet arithmetic, an uncapacitated simulation, and
-     the capacity-aware simulation with repeated replications.
-   - Each method selects with one pre-declared rule on the **search split**.
-   - The choices are re-evaluated on a **held-out split** with fresh seeds and unseen demand
-     conditions, followed by one-at-a-time sensitivity.
-6. **Agent-assisted proposals, treated as untrusted.**
-   - A request becomes a schema-validated JSON proposal.
-   - A deterministic critic returns `ok`, `needs_input` (with questions) or `rejected` (with
-     reasons).
-   - There is at most one repair round, then an explicit stop.
-   - The offline proposer is a scripted fake. A real Claude adapter is strictly opt-in and
-     has a spend cap.
-7. **Grounded briefs and a named human review.**
-   - Briefs are built only from stored ledger records.
-   - Every number in a narrative must match a cited stored fact, or the narrative is dropped.
-   - A review is recorded in an append-only, hash-chained SQLite ledger. Approval means
-     "accepted for discussion"; nothing is deployed.
-8. **Pre-registered research studies.** These test the twin against a hidden "truth" simulator
-   with mechanisms the twin omits, compare budgeted replication allocation, and assess
-   robustness to parameter uncertainty (see [Results](#results)).
+</div>
 
-Three synthetic domain packs share one interface: **insurance claims**, **procurement
-exceptions** and **customer-support escalations**. Each includes an automation option whose
-fallout lands on a human queue.
+---
 
-## Prerequisites and quick start (offline, CPU-only)
+AI can speed up one step of a process while quietly shifting work into another queue.
+Spreadsheet averages miss this. **Agentic Ops Twin** simulates individual cases competing for
+finite people and automation. It compares only *permitted* operating changes, re-checks every
+recommendation on data it was not chosen on, and keeps mandatory controls out of reach of any
+optimiser or AI proposal.
 
-You need Python 3.11+ and either `uv` or `pip`. No GPU, model download or provider account is
-needed.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/figures/decision-quality-dark.svg">
+  <img alt="SLA attainment of each method's selected option on held-out seeds, for three domain packs under normal demand and a 25% surge" src="docs/assets/figures/decision-quality-light.svg">
+</picture>
 
-```bash
-uv venv && uv pip install -e ".[dev]"   # or: python -m venv .venv && pip install -e ".[dev]"
-# activate: .venv\Scripts\activate (Windows) | source .venv/bin/activate (macOS/Linux)
+## Key findings
 
-pytest -q                                  # 72 tests (4 skip without the [llm] extra)
-ruff check . && ruff format --check . && mypy src
+All results are simulated on synthetic data and are conditional on the stated models (see
+[Results](#results) and [Limitations](#scope-and-limitations)).
 
-throughline packs
-throughline validate --pack insurance
-throughline study --pack insurance --profile quick      # about 1 min; writes results/insurance/
-throughline propose --pack insurance "Automate triage under the surge scenario." --run
-throughline propose --pack insurance "Skip the fraud check under normal demand."   # rejected
-throughline brief --pack insurance                       # grounded draft from the stored study
-throughline review --brief <brief-record-id> --reviewer "<name>" --decision approve
-throughline ledger verify
-```
+- **Ignoring contention is the costly mistake.** In all three domain packs, the
+  uncapacitated simulation picked a cheaper configuration that then **failed the service rule**
+  on held-out seeds. Its SLA attainment was 90%, 6% and 28%, against 98–99% for the
+  capacity-aware choice.
+- **Recommendations tuned for normal demand break under a surge.** The search split never
+  showed this. The held-out split showed that, under +25% demand, no method's choice met the
+  rule in any pack.
+- **"Calibrated but wrong."** A twin calibrated from 960 hours of history matched completion
+  rates within 3.3%. It still underestimated median cycle time by **65–82%**, and reported
+  98–99% SLA attainment where the hidden truth gave **58–81%**. Residual diagnostics flagged all
+  three missing mechanisms from the baseline log alone.
+- **Controls held under every path tested.** None of the 6 requests to remove a control
+  produced a runnable scenario. Every enumerated alternative re-proves every control path.
 
-Full reproduction of every committed result took 9 min 40 s on an Intel i7-11800H (16 logical
-CPUs, 16 GB RAM, Windows 11), using 6 worker processes:
+## Contents
+
+- [Why it is different](#why-it-is-different)
+- [Quick start](#quick-start)
+- [How it works](#how-it-works)
+- [Results](#results)
+- [Domain packs](#domain-packs)
+- [AI proposals and governance](#ai-proposals-and-governance)
+- [Reproducibility](#reproducibility)
+- [Project structure](#project-structure)
+- [Scope and limitations](#scope-and-limitations)
+- [Roadmap](#roadmap)
+
+## Why it is different
+
+| Typical what-if tooling | Agentic Ops Twin |
+|---|---|
+| Average durations, no queues | Each case is a SimPy process competing for finite servers until a fixed horizon. Unfinished work is counted, never dropped. |
+| Silent defaults for missing inputs | Missing or inconsistent assumptions are **rejected**, with typed reasons. |
+| Controls are a convention | Controls are proved for every routing path and must be performed by humans. No lever can reach them. |
+| One run, or the same seed reused | Repeated independent replications with 95% intervals. Pairing is **verified** by an arrival-stream digest, never assumed. |
+| Pick the best result on the same runs | The decision rule is declared up front, options are selected on a search split, then re-evaluated on held-out seeds and unseen demand. |
+| "The model fits history, so trust it" | A pre-registered **hidden-truth** study measures intervention accuracy and flags model inadequacy from the log alone. |
+| An LLM fills the gaps | Proposals are untrusted JSON. A deterministic critic asks questions instead of guessing, and every number in a narrative must cite a stored result. |
+
+## Quick start
+
+Requirements: Python 3.11–3.13 and a CPU. Offline use needs no GPU and no provider account.
 
 ```bash
-throughline study --pack all --profile full
-throughline research --pack all
-throughline eval-agent --provider fake
-throughline brief --pack insurance   # and procurement, support
-throughline dataset --pack insurance --seed 1000   # export a seeded case stream + event log
+git clone https://github.com/bernardosaab/agentic-ops-twin.git && cd agentic-ops-twin
+python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -e ".[dev,viz]"
+
+ops-twin study --pack insurance --profile quick         # ~1 min: baseline ladder, search, held-out
+ops-twin propose --pack insurance "Automate triage under the surge scenario." --run
+ops-twin propose --pack insurance "Skip the fraud check under normal demand."   # → rejected
+ops-twin brief --pack insurance                          # grounded draft for human review
+ops-twin ledger verify
 ```
 
-Results are deterministic for a given seed and do not depend on worker count (tested). The
-default pool is capped at 6 processes. Set `--workers N` or `THROUGHLINE_WORKERS` to change it.
+| Task | Command |
+|---|---|
+| Lint, type-check and test (82 tests, 88% line coverage) | `make check` |
+| Regenerate every committed result and figure (~10 min) | `make reproduce` |
+| Local API with interactive docs at `/docs` | `make api` |
+| Documentation site | `make docs-serve` |
 
-Local API, unauthenticated and bound to localhost; it uses the scripted proposer only:
+The opt-in Claude adapter is described in
+[AI proposals and governance](#ai-proposals-and-governance).
 
-```bash
-uvicorn throughline.api:app --host 127.0.0.1 --port 8000   # docs at /docs
+## How it works
+
+```mermaid
+flowchart LR
+    subgraph U["Untrusted"]
+        R["Operator request"] --> P["Proposer<br/>scripted fake or opt-in Claude"]
+    end
+    subgraph T["Trusted, deterministic"]
+        P -->|JSON| C{"Critic"}
+        C -->|needs input| Q["Questions"]
+        C -->|rejected| X["Reasons"]
+        C -->|ok| L["Bounded levers"]
+        L --> V["Validator<br/>control-path proofs"]
+        V --> E["SimPy engine<br/>finite resources and horizon"]
+        E --> M["Replications<br/>verified pairing, CIs"]
+        M --> D["Decision study<br/>search, then held-out"]
+    end
+    subgraph G["Governance"]
+        D --> LG[("Hash-chained ledger")] --> B["Grounded brief"] --> H["Named review<br/>no deployment"]
+    end
 ```
 
-## Opt-in real model (Claude)
+1. **Model.** A versioned, digest-bound `OperatingModel` describes:
+   - case types with Poisson arrivals and lognormal values;
+   - pooled resources with costs;
+   - steps with alternative variants, such as manual or automated;
+   - first-match routing with bounded rework;
+   - an SLA and its penalty;
+   - mandatory controls.
+2. **Levers.** Each pack declares the only changes allowed: capacities within bounds, step
+   variants, and queue policy, all under a staffed-cost budget. No lever can touch routing,
+   controls, costs or demand.
+3. **Simulate.** Random inputs are counter-based. Each draw is
+   `BLAKE2b(seed, stream, case, step, visit)`, so two policies see identical arrivals and
+   service draws however their events interleave.
+4. **Compare.** Every permitted alternative is scored three ways: spreadsheet arithmetic, an
+   uncapacitated simulation, and the capacity-aware simulation. Each method selects with the
+   same pre-declared rule: *minimise cost per case including the SLA penalty, subject to ≥95%
+   completion and ≥85% SLA attainment*. All three choices are then re-simulated on the
+   held-out split.
+5. **Explain and record.** Briefs are assembled from ledger records, with every number cited.
+   A named reviewer approves for discussion; nothing is ever deployed.
 
-```bash
-pip install -e ".[llm]"
-export ANTHROPIC_API_KEY=...           # never committed, never logged or sent in prompts
-throughline propose --pack support "Automate routing under normal demand." \
-    --provider anthropic --model claude-haiku-5-5 --max-cost-usd 0.05
-throughline eval-agent --provider anthropic --model claude-haiku-5-5 --max-cost-usd 0.25
-throughline brief --pack support --narrator anthropic --max-cost-usd 0.02
-```
-
-- **What is sent.** Only the synthetic pack description (levers, bounds, current values,
-  demand conditions, control names) and the request text. For narratives, only stored
-  simulation facts are sent.
-- **Request settings.** Structured JSON-schema output, `effort: low`, `max_tokens` 2048 and a
-  60 s timeout. There is one retry at the HTTP level and at most one repair round.
-- **Spend control.** Each call is refused before sending if its worst-case cost would exceed
-  the cap (`budget_exhausted`).
-- **What is recorded.** The requested and reported model, input and output tokens, latency and
-  stop reason, and an estimated cost. Unavailable values are null, not zero.
-- **Pricing assumptions** live in [`src/throughline/prices.toml`](src/throughline/prices.toml),
-  as of 2026-11-03. Claude Haiku 5.5 is listed at $0.10 / $0.50 per million input / output
-  tokens. A proposal prompt is roughly 1–2k input tokens, so all 36 labelled requests should
-  cost on the order of $0.01. **This is an estimate. Verify current prices before any run.**
-- **Not run yet.** No real-model run has been performed for this repository, so **no
-  real-model result is claimed.** The adapter is tested only against a stubbed SDK client
-  (`tests/test_anthropic_adapter.py`).
-
-## Architecture
-
-```text
-request ─► Proposer (fake | opt-in Claude) ─► schema ─► Critic ─► ChangeSet      [untrusted → trusted]
-                                                                   │
-OperatingModel ─► levers (capacity | variant | priority) ─► apply_changes ─► validate (controls proved)
-                                                                   │
-counter-based inputs (digest) ─► SimPy engine (finite resources, horizon, open work) ─► metrics
-                                                                   │
-replications ─► t-CIs, verified paired / Welch diffs ─► baseline ladder ─► search split ─► held-out
-                                                                   │
-                     hash-chained ledger ─► grounded brief ─► named review (no deployment)
-```
-
-More detail is in [docs/architecture.md](docs/architecture.md). The design decisions are in
-[docs/adr](docs/adr):
-- [counter-based inputs with verified pairing](docs/adr/0001-counter-based-exogenous-inputs.md);
-- [an explicit state machine instead of LangGraph](docs/adr/0002-explicit-state-machine-not-agent-framework.md);
-- [bounded enumeration instead of OR-Tools](docs/adr/0003-bounded-enumeration-not-solver.md).
-
-Domain vocabulary is defined in [CONTEXT.md](CONTEXT.md).
+More detail is in the [architecture guide](docs/architecture.md) and in the design decisions
+([ADRs](docs/adr)).
 
 ## Results
 
-All numbers below come from the committed files in [`results/`](results/), produced by the
-commands above. They are simulated outcomes on synthetic packs.
+All numbers come from committed files in [`results/`](results), produced by `make reproduce`.
+Intervals are 95% across independent replications. Splits:
 
-The search split uses seeds 1000–1009 under normal demand. The held-out split uses seeds
-9000–9019 under three conditions: normal, +25% surge, and a shifted mix. Intervals are 95%
-intervals across replications. Seeds and splits are documented in
-[docs/data-and-splits.md](docs/data-and-splits.md).
+- **Search:** seeds 1000–1009, normal demand.
+- **Held-out:** seeds 9000–9019, under normal demand, a +25% surge and a pack-specific mix shift.
 
-### 1. Decision studies: the baseline ladder
+### 1. Decision quality: the baseline ladder
 
-The objective is cost per case including an SLA-miss penalty. The rule is to minimise it
-subject to a mean completion rate of at least 95% and mean SLA attainment of at least 85%.
-
-| Pack | Capacity-aware choice | Held-out normal: Δ objective vs baseline (paired) | Uncapacitated-simulation choice on held-out normal |
+| Pack | Capacity-aware choice | Held-out Δ cost/case vs current (paired) | Uncapacitated choice, held-out |
 |---|---|---|---|
-| Insurance | automate triage + high-value-first | −19.20 (−19.46 to −18.94); p95 7.37 → 5.82 h; meets rule | also cuts an adjuster: SLA 89.8%, p95 22.2 h, **fails** rule |
-| Procurement | 2 AP clerks + ML-assisted classification | −6.47 (−6.59 to −6.36); meets rule | 2 AP clerks, manual: SLA 5.7%, p95 68.0 h, **fails** rule |
-| Support | tier-1 = 3, tier-2 = 6, automated routing | −9.06 (−9.20 to −8.92); meets rule | also cuts a specialist: SLA 27.6%, p95 31.0 h, **fails** rule |
+| Insurance claims | automate triage + high-value-first | **−19.20** (−19.46 to −18.94); p95 7.4 → 5.8 h; meets rule | also cuts an adjuster: SLA 89.8%, p95 22.2 h, **fails** |
+| Procurement exceptions | 2 AP clerks + ML-assisted classification | **−6.47** (−6.59 to −6.36); meets rule | 2 AP clerks, manual: SLA 5.7%, p95 68.0 h, **fails** |
+| Customer support | tier-1 = 3, tier-2 = 6, automated routing | **−9.06** (−9.20 to −8.92); meets rule | also cuts a specialist: SLA 27.6%, p95 31.0 h, **fails** |
 
-The headline findings:
-- **Ignoring contention is the costly mistake.** In all three packs, the uncapacitated
-  simulation chose a cheaper configuration that fails the service constraints on held-out
-  seeds.
-- **A careful spreadsheet was a strong baseline here.** Average-duration arithmetic with an
-  offered-load check picked the same configuration as the capacity-aware simulation in
-  procurement and support. In insurance it picked the same lever change without the priority
-  rule, with an identical objective. We report this rather than presenting it as a win for
-  simulation.
-- **A downstream shift appears where the model produces it.** In insurance, automating triage
-  alone raised adjuster utilisation by 8.0 points, the flagged downstream load increase, while
-  still lowering the objective (−18.67, paired).
-- **Choices tuned for normal demand break under the held-out surge.** Procurement's choice is
-  worse than baseline under +25% demand: +4.72 objective, SLA 34.7% against 74.7%. Support's
-  choice drops to 9.3% SLA against the baseline's 72.5%. Under the surge, no evaluated
-  insurance alternative meets the rule. The search split did not reveal any of this; the
-  held-out evaluation did.
+**A careful spreadsheet was a strong baseline.** Average-duration arithmetic with an
+offered-load check reached the same configuration as the capacity-aware simulation in
+procurement and support. In insurance it chose the same change without the priority rule, with
+an identical objective. The method that fails is the one that ignores contention.
 
-Every pairing claim was verified. Same-condition comparisons had all arrival digests
-identical. Cross-condition comparisons (normal against surge) were detected as unpaired and
-used Welch intervals. Full tables, Pareto sets and sensitivity analyses are in
-`results/<pack>/study-full.md`, and grounded briefs are in `results/<pack>/brief.md`.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/figures/backlog-surge-dark.svg">
+  <img alt="Insurance backlog over time under a 25% surge for the current operation, the uncapacitated choice and the capacity-aware choice" src="docs/assets/figures/backlog-surge-light.svg">
+</picture>
 
-### 2. Pre-registered research studies ([docs/preregistration.md](docs/preregistration.md))
+**Automation can shift load downstream.** In insurance, automating triage alone raised adjuster
+utilisation by 8.0 points. The model's fallout lands on adjusters, but cost per case still fell
+by 18.67 (paired).
 
-The pre-registration was hashed into the ledger before the run; its SHA-256 begins
-`fd87abe665fdf5da`. The hidden truth adds three things the twin does not model: handoff
-delays, per-shift absenteeism, and a daily arrival peak. The twin is calibrated only from a
-960-hour baseline history that the truth produced. Full report:
-[results/research.md](results/research.md).
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/figures/downstream-shift-dark.svg">
+  <img alt="Mean utilisation by resource with manual versus automated triage in the insurance pack" src="docs/assets/figures/downstream-shift-light.svg">
+</picture>
 
-| | Insurance | Procurement | Support |
+**Held-out conditions changed the conclusions.** Under +25% demand:
+
+- Procurement's choice was *worse* than the current operation: +4.72 cost per case, and SLA
+  attainment of 34.7% against 74.7%.
+- Support's choice fell to 9.3% SLA attainment, against 72.5%.
+
+Same-condition comparisons were paired only after all 20 arrival digests matched.
+Cross-condition comparisons were detected as unpaired and used Welch intervals. Full tables are
+in `results/<pack>/study-full.md` and draft briefs are in `results/<pack>/brief.md`.
+
+### 2. Pre-registered research: is the twin's advice trustworthy?
+
+The protocol is in [docs/preregistration.md](docs/preregistration.md). Its hash was written to
+the ledger before any research run.
+
+The setup:
+
+- A hidden-truth simulator adds three mechanisms the twin omits: handoff delays, per-shift
+  absenteeism and a daily arrival peak.
+- The twin is calibrated only from one 960-hour history that the truth produced.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/figures/calibrated-but-wrong-dark.svg">
+  <img alt="Calibrated twin versus hidden truth for median cycle time and SLA attainment in three packs" src="docs/assets/figures/calibrated-but-wrong-light.svg">
+</picture>
+
+| Hypothesis | Insurance | Procurement | Support |
 |---|---|---|---|
-| Baseline fit: completion rate, relative error | +3.3% | +2.0% | +3.3% |
-| Baseline fit: median cycle time, relative error | −65% | −75% | −82% |
-| Baseline fit: SLA attainment, twin vs truth | 98.2% vs 80.6% | 98.7% vs 72.1% | 99.3% vs 57.9% |
-| Residual diagnostics flagged (handoff gap, idle capacity while queued, peak-to-trough arrivals) | 3 / 3 | 3 / 3 | 3 / 3 |
-| **H1** Kendall τ vs truth (normal / surge): twin | 0.91 / 0.67 | 0.97 / 0.79 | 0.73 / 0.58 |
-| **H1** same, spreadsheet and uncapacitated (identical here) | 0.59 / 0.15 | 0.75 / 0.63 | 0.58 / 0.79 |
-| **H1** supported? | yes | yes | **no** (worse under surge) |
-| **H2** OCBA beats equal allocation (PCS) | no: identical | no: identical | no: identical |
-| **H3** robust ≤ point-estimate regret | yes* | yes* (same choice) | **no** |
+| **H1.** The twin ranks alternatives closer to the truth than both baselines (Kendall τ, normal and surge) | ✅ 0.91 and 0.67, vs 0.59 and 0.15 | ✅ 0.97 and 0.79, vs 0.75 and 0.63 | ❌ 0.73 and 0.58, vs 0.58 and **0.79** |
+| **H2.** OCBA allocation beats equal allocation (probability of correct selection) | ➖ identical | ➖ identical | ➖ identical |
+| **H3.** The minimax-regret choice does at least as well as the point-estimate choice in the truth under a surge | ✅* | ✅* (same choice) | ❌ |
 
-**"Calibrated but wrong" is the central result.** The calibrated twin reproduces the observed
-completion rate within about 3%. It still underestimates median cycle time by 65–82% and
-reports roughly 98% SLA attainment where the truth gives 58–81%. All three residual
-diagnostics flag the omitted mechanisms from the baseline log alone. A good baseline fit is
-not evidence that a twin is accurate under intervention.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/figures/ranking-validity-dark.svg">
+  <img alt="Kendall tau between each method's predicted ranking and the hidden truth's ranking" src="docs/assets/figures/ranking-validity-light.svg">
+</picture>
 
-H1 ranking validity held in 2 of 3 packs. In support under surge, the simpler baselines
-ranked alternatives better than the twin did.
+How to read these outcomes:
 
-**H2 was uninformative.** In each pack, the best two shortlisted alternatives fell within the
-indifference zone, so both procedures reached a probability of correct selection (PCS) of
-0.95–1.00 at every budget. The test needs a harder shortlist.
+- **H1 held in two of three packs.** In support under surge, the simpler baselines ranked
+  alternatives better than the twin did.
+- **H2 was uninformative.** The top two shortlisted alternatives fell within the indifference
+  zone, so both procedures reached a probability of correct selection of 0.95–1.00.
+- **\*H3 is weak evidence.** No choice met the rule in the truth under surge, so outcomes were
+  judged on the truth objective alone. In support the robust choice was worse, although the
+  robustness analysis did flag the point choice as fragile.
 
-**\*H3 is weak evidence.** Under the truth's surge, *neither* choice met the decision rule in
-any pack, so H3 was judged on the truth objective alone. In procurement both methods picked
-the same alternative. In support the minimax-regret choice was worse (94.36 against 86.26).
-The robustness analysis did flag support's point-estimate choice as fragile: it was feasible
-in fewer than 80% of the bootstrap worlds.
+With three packs, these outcomes are descriptive. The hidden truth is another simulator by the
+same authors. The full report is in [results/research.md](results/research.md).
 
-With three packs, all of this is descriptive. The hidden truth is another simulator by the
-same authors, so these results say nothing about real operations.
+### 3. Scenario proposals (scripted, not AI performance)
 
-### 3. Scenario-proposal evaluation (scripted fake only)
+The offline proposer is a set of hand-written rules scored on 36 labelled requests written by
+the same authors. It scored **35/36**: 18/18 on dev requests and 17/18 on held-out requests. The
+miss was "reduce specialists by 1".
 
-[results/agent/eval-fake.md](results/agent/eval-fake.md) reports **35/36** end-to-end matches:
-18/18 on dev requests and 17/18 on held-out. The miss was "reduce specialists by 1", which
-the rules did not parse, so only the priority change was proposed.
+The property that matters is enforced by the critic regardless of the proposer:
 
-**This is not AI performance.** The fake is a set of hand-written keyword rules by the same
-authors as the requests. The meaningful property is enforced by the critic, independently of
-any proposer: **0 of 6 control-removal requests produced a runnable scenario.** Missing values
-became questions, and contradictions, out-of-bounds values, over-budget requests and
-out-of-scope requests (for example, deploying to production) were rejected with reasons.
+- **0/6** control-removal requests became runnable.
+- Missing values became questions.
+- Contradictions, out-of-bounds, over-budget and out-of-scope requests were rejected with
+  reasons.
 
-## Implemented vs not implemented
+**No real-model run has been performed, so no real-model result is claimed.**
 
-| Implemented and tested | Not implemented (gaps) |
+## Domain packs
+
+All three packs are synthetic and hand-authored (generator `packs-v1`). They share one
+`DomainPack` interface and one engine.
+
+| Pack | Flow | Mandatory controls | Automation option, and where its fallout lands |
+|---|---|---|---|
+| Insurance claims | intake → triage → assessment (bounded rework) → fraud check → senior approval → settlement | fraud check and senior approval for claims ≥ 10,000 | automated triage; 22% goes to adjuster review |
+| Procurement exceptions | capture → classify → buyer resolution or receipt chase → three-way match (bounded rework) → approval → posting | three-way match for every case; segregation-of-duties approval for ≥ 10,000 | ML-assisted classification; 25% goes to clerk review |
+| Customer support | tier-1 intake → routing → tier 2 → specialist → QA → close | QA review for refunds ≥ 500 | automated routing; 25% misroutes fixed by tier 1 |
+
+Seeds, splits, the generator, and the assumptions shared with the implementation are listed in
+[docs/data-and-splits.md](docs/data-and-splits.md). To export one seeded run's case stream and
+event log:
+
+```bash
+ops-twin dataset --pack insurance --seed 1000
+```
+
+## AI proposals and governance
+
+```bash
+pip install -e ".[llm]"
+export ANTHROPIC_API_KEY=...     # read from the environment; never logged or sent in prompts
+ops-twin propose --pack support "Automate routing under normal demand." \
+    --provider anthropic --model claude-haiku-5-5 --max-cost-usd 0.05
+ops-twin eval-agent --provider anthropic --model claude-haiku-5-5 --max-cost-usd 0.25
+```
+
+- **Opt-in only.** A real model is used only with `--provider anthropic`, an API key and an
+  explicit cost cap. Any call whose worst-case cost would exceed the cap is refused before it
+  is sent.
+- **What is sent.** Only the synthetic pack description and the request text, or stored
+  simulation facts when writing a narrative.
+- **Request settings.** Structured JSON output, `effort: low`, 2048 max tokens, a 60 s timeout,
+  and at most one repair round.
+- **Recorded per call.** Requested and reported model, input and output tokens, latency, stop
+  reason, and an estimated cost from [`prices.toml`](src/agentic_ops_twin/prices.toml).
+- **Cost estimate.** `prices.toml` records Claude Haiku 5.5 at $0.10 input and $0.50 output per
+  million tokens (as of 2026-11-03). On that basis, the 36-request evaluation should cost about
+  $0.01. These prices are assumptions; verify current pricing before running.
+- **Ledger and review.** Requests, proposals, critiques, experiments, briefs and reviews go into
+  an append-only, hash-chained SQLite ledger. A named review binds a decision to the brief's
+  digest. Approval means "accepted for discussion"; nothing is deployed.
+
+Details: [Agent and governance](docs/agent-and-governance.md).
+
+## Reproducibility
+
+- **Deterministic.** Results depend only on seeds, and a test checks that the number of worker
+  processes doesn't change them. After the package restructure for v0.1.0, every result file
+  was regenerated and compared field by field with the previous run. All were **identical**.
+- **Published.** Seeds, splits, the generator version, model digests and the exogenous-input
+  scheme are recorded in each result.
+- **Runtime.** The full reproduction took 9 min 28 s on an Intel i7-11800H laptop CPU (8
+  cores, 16 GB RAM) using 6 worker processes.
+- **Development history.**
+  - An earlier full run crashed on Windows when 16 workers exhausted memory. The default pool
+    is now capped at 6.
+  - A labelling bug in equivalence collapsing was fixed before the committed run, with a
+    regression test.
+  - No mechanism, alternative set or decision rule was tuned after seeing results.
+
+## Project structure
+
+```text
+src/agentic_ops_twin/
+├── simulation/   model · validate · exogenous · engine · metrics · stats
+├── decision/     scenarios · baselines · search · sensitivity · experiment · study
+├── packs/        insurance · procurement · support · base · data/requests.json
+├── agent/        contracts · critic · loop · fake · anthropic_adapter · eval
+├── governance/   ledger · brief · grounding
+├── research/     calibrate · selection · runner
+├── reporting/    study_report · research_report · figures
+├── cli.py        `ops-twin` command line
+└── api.py        local FastAPI service
+tests/            82 tests: queueing theory, invariants, controls, agent, research, CLI
+results/          committed outputs of `make reproduce`
+docs/             MkDocs site, ADRs, pre-registration, figures
+```
+
+## Scope and limitations
+
+| Implemented and tested | Not implemented |
 |---|---|
-| Typed contracts; validator; control-path proofs; human-only controls | Live data ingestion, calibration pipelines for real logs, freshness checks |
-| SimPy engine; zero capacity; overload; open-work accounting; Little's law, M/M/c, deterministic tests | Shifts and calendars, abandonment, preemption, batching, load-dependent automation error |
-| Counter-based inputs; digest-verified pairing; t / Welch intervals | Variance-reduction beyond common random numbers; warm-up detection |
-| Spreadsheet and uncapacitated baselines; bounded enumeration; Pareto set; held-out split; sensitivity | OR-Tools sub-problems; search over spaces larger than 200 combinations; sequential stopping in the main study |
-| Three packs on one interface; seeded dataset export | Real or licensed public datasets; validation against observed data |
-| Untrusted proposal loop; scripted fake; opt-in Claude adapter (stub-tested); grounded briefs | Any measured real-model result; LangGraph; React UI |
-| Append-only, hash-chained ledger; named (self-asserted) review; local API | Authentication, authorisation, signed reviews, PostgreSQL, multi-user operation |
-| Hidden-truth validation, OCBA comparison, bootstrap robustness (pre-registered) | Multiple hidden-truth families; more packs; significance testing across packs |
+| Typed contracts, validator, control-path proofs, human-only controls | Live data ingestion, freshness checks, synchronisation |
+| SimPy engine; analytical checks (deterministic, M/M/1, M/M/c, Little's law); zero capacity; overload | Shifts and calendars, abandonment, preemption, batching, load-dependent automation error |
+| Verified pairing, t and Welch intervals, sensitivity, held-out split | Interval-bound decision rules, automatic warm-up detection |
+| Bounded enumeration, Pareto set, OCBA study | OR-Tools sub-problems; search spaces above 200 combinations |
+| Untrusted proposal loop, scripted fake, stub-tested Claude adapter | **Any measured real-model result**; LangGraph orchestration; a web UI |
+| Hash-chained ledger, grounded briefs, named (self-asserted) review | Authentication, signed reviews, multi-user storage |
 
-## Trade-offs worth knowing
+- Simulated counterfactuals are conditional on the model. They are **not causal estimates or
+  forecasts**.
+- A good baseline fit does not establish accuracy under intervention; the research study above
+  shows this directly.
+- All data is synthetic, so nothing here validates against real operations.
+- The API is unauthenticated and meant for local use.
 
-- **Enumeration instead of an optimiser.** It is exhaustive, auditable and capped, but it only
-  works for small spaces.
-- **Rules on means, not interval bounds.** This is simpler, but marginal choices can flip
-  between replication sets. The held-out split and the robustness study exist to expose this.
-- **The economic objective.** Spreading staffed cost over arrivals means higher demand can
-  *lower* cost per case while service collapses. That is why the rule has explicit service
-  constraints.
-- **A deterministic critic over a model.** Safety properties do not depend on proposer
-  quality, but legitimate phrasing the proposer misses becomes a question or a rejection, not
-  a guess.
-- **Calibration uses only the active variants.** An automation never used in history keeps its
-  authored parameters, and this is listed in the calibrated model's assumptions.
+Full metric definitions are in [docs/assumptions-and-limitations.md](docs/assumptions-and-limitations.md).
 
-Full definitions and limitations are in
-[docs/assumptions-and-limitations.md](docs/assumptions-and-limitations.md).
+## Roadmap
 
-## Development history relevant to the results
+- One measured real-model evaluation on the held-out requests, with recorded usage and cost.
+- Decision rules on interval bounds, and sequential replication stopping in the main study.
+- Shifts, calendars and abandonment in the engine.
+- More hidden-truth families, and a fourth domain pack that is held out from development.
+- A results dashboard published with the documentation site.
 
-- Quick pilot runs of the research studies were made during development with the same
-  pre-registration.
-- The first full run crashed: 16 worker processes exhausted the Windows paging file. Workers
-  now load SciPy lazily and the default pool is capped at 6.
-- A second full run exposed a labelling bug. Equivalent configurations sometimes collapsed onto
-  a larger change set than necessary, which hid the automation-only analysis in insurance.
-  This was fixed with a regression test and the full pipeline was re-run. The committed results
-  are from that run.
-- No mechanism, alternative set or decision rule was tuned after seeing any result.
+## Contributing, security and citation
 
-## License
-
-MIT. See [LICENSE](LICENSE).
+Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Please report
+vulnerabilities as described in [SECURITY.md](SECURITY.md). If you use this work, cite it with
+[CITATION.cff](CITATION.cff). Licensed under [MIT](LICENSE).

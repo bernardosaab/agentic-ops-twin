@@ -1,12 +1,12 @@
 # Research studies (pre-registered)
 
-Pre-registration SHA-256 `fd87abe665fdf5da` (ledger record `preregistration-a69a63f1116b`). Profile: full.
+Pre-registration SHA-256 `979e3bbbeb99edc5` (ledger record `preregistration-a00ba6bb9cc0`). Profile: full.
 
 | Pack | H1 ranking validity | H2 OCBA ≥ equal | H3 robust ≤ point regret | Runtime s |
 |---|---|---|---|---|
-| insurance | yes | no | yes | 78.6 |
-| procurement | yes | no | yes | 69.1 |
-| support | no | no | no | 153.9 |
+| insurance | yes | no | yes | 76.3 |
+| procurement | yes | no | yes | 91.1 |
+| support | no | no | no | 128.9 |
 
 ## insurance
 

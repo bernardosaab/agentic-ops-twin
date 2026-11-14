@@ -1,65 +1,94 @@
-# Architecture
+# How it works
 
-```text
- operator request ──► Proposer (scripted fake | opt-in Claude)   UNTRUSTED
-                              │ raw JSON
-                              ▼
-                     parse + Pydantic schema ──► Critic (deterministic)        TRUSTED
-                              │                 ok | needs_input | rejected
-                              │                 (≤1 repair round, then stop)
-                              ▼
- OperatingModel ──► DecisionSpace levers ──► apply_changes ──► validate()      TRUSTED
- (versioned,        (capacity, variant,       (bounds, budget,  (structure +
-  digest-bound)      priority only)            control lock)     control paths)
-                              │
-                              ▼
-        counter-based exogenous inputs (seed, stream, case, step, visit)
-                              │ arrival-stream digest per replication
-                              ▼
-          SimPy engine: cases compete for finite resources to a horizon
-                              │ ReplicationMetrics (conservation asserted)
-                              ▼
-   replications ──► t-intervals; paired diffs only if digests match, else Welch
-                              │
-            baseline ladder: spreadsheet │ uncapacitated │ capacity-aware
-                              │
-   bounded enumeration ─► decision rule on SEARCH split ─► HELD-OUT re-evaluation
-                              │                               + sensitivity
-                              ▼
-       append-only hash-chained ledger (SQLite) ──► grounded brief ──► named review
-                                                     (facts + citations)  (no deployment)
+Agentic Ops Twin separates **untrusted proposals** from **trusted evaluation**. A proposer, which
+may be a language model, can only suggest values for declared levers. Everything that decides
+whether a scenario may run, and what its results are, is deterministic code that is tested and
+version-pinned.
+
+## End-to-end flow
+
+```mermaid
+flowchart LR
+    subgraph U["Untrusted"]
+        R["Operator request"] --> P["Proposer<br/>scripted fake or opt-in Claude"]
+    end
+    subgraph T["Trusted, deterministic"]
+        P -->|JSON| S["Schema validation"]
+        S --> C{"Critic"}
+        C -->|needs_input| Q["Questions to operator"]
+        C -->|rejected| X["Reasons, stop"]
+        C -->|ok| L["Levers: capacity, variant, priority"]
+        L --> A["apply_changes<br/>bounds, budget, control lock"]
+        A --> V["Validator<br/>control-path proofs"]
+        V --> E["SimPy engine<br/>finite resources, horizon"]
+        E --> M["Replications<br/>t-intervals, verified pairing"]
+        M --> D["Decision study<br/>search split, then held-out split"]
+    end
+    subgraph G["Governance"]
+        D --> LG[("Hash-chained ledger")]
+        LG --> B["Grounded brief"]
+        B --> H["Named human review<br/>no deployment"]
+    end
 ```
 
-## Modules
+## Package layout
 
-| Module | Responsibility |
-|---|---|
-| `core/model.py` | Frozen Pydantic contracts: distributions (inverse-CDF), routing rules, step variants, resources, case types, controls, assumptions; model digest. |
-| `core/validate.py` | Assumption critic: references, probabilities, default routes, bounded loops, completion reachability, control-path proofs, human-only controls, zero-capacity warnings. |
-| `core/exogenous.py` | BLAKE2b counter-based uniforms, Poisson arrivals (with optional thinning profile), stream digests. |
-| `core/engine.py` | SimPy process per case; `PriorityResource` per pool; zero capacity as a never-granted request; horizon cut-off with open-case accounting; hidden mechanisms for validation only. |
-| `core/metrics.py`, `core/stats.py` | Metric definitions, Student-t intervals, paired vs Welch differences with pairing verification. |
-| `scenarios.py` | Typed levers, bounds, budget, `apply_changes` (re-validates), enumeration with equivalence collapse. |
-| `baselines.py` | Spreadsheet average-duration estimate (absorbing-chain visits); uncapacitated mode lives in the engine. |
-| `search.py`, `study.py`, `sensitivity.py` | Decision rule, Pareto front, the decision-study pipeline, one-at-a-time sensitivity. |
-| `packs/` | Insurance, procurement and support packs behind one `DomainPack` contract; labelled requests. |
-| `agent/` | Proposal contracts, scripted fake, opt-in Anthropic adapter, critic, bounded loop, evaluation, grounded brief. |
-| `research/` | Calibration from logs, residual diagnostics, OCBA selection, pre-registered studies. |
-| `ledger.py` | Append-only (SQLite triggers) and hash-chained evidence records; `verify`. |
-| `api.py`, `cli.py` | Local FastAPI service (scripted proposer only) and CLI. |
+| Subpackage | Modules | Responsibility |
+|---|---|---|
+| `simulation` | `model`, `validate`, `exogenous`, `engine`, `metrics`, `stats` | See [Simulation core](#simulation-core) below. |
+| `decision` | `scenarios`, `baselines`, `search`, `sensitivity`, `experiment`, `study` | See [Decision analysis](#decision-analysis) below. |
+| `packs` | `insurance`, `procurement`, `support`, `base`, `data/requests.json` | Three synthetic domain packs behind one `DomainPack` contract, plus the labelled agent requests. |
+| `agent` | `contracts`, `critic`, `loop`, `fake`, `anthropic_adapter`, `eval` | Proposal schema, the deterministic critic, the bounded four-state loop, the scripted fake, the opt-in Claude adapter, and the evaluation on labelled requests. |
+| `governance` | `ledger`, `brief`, `grounding` | Append-only hash-chained SQLite ledger, evidence-linked briefs, and the number-level grounding check. |
+| `research` | `calibrate`, `selection`, `runner` | Calibration from logs with residual diagnostics, OCBA versus equal allocation, and the pre-registered studies. |
+| `reporting` | `study_report`, `research_report`, `figures` | Markdown reports and figures rendered only from stored results. |
+| top level | `cli`, `api` | The `ops-twin` CLI and a local FastAPI service that uses the scripted proposer only. |
 
-## Trust boundaries
+### Simulation core
 
-- **Untrusted:** anything a proposer returns. It is parsed against a strict schema. Values it
-  leaves out become operator questions, and its changes can only use declared lever keys.
-- **Trusted inputs:** pack models, controls, decision spaces, decision rules and splits. These
-  are authored data, versioned and digest-bound.
-- **Defence in depth for controls:**
-  - No lever type can address routing, controls, costs or demand.
-  - The critic rejects any proposed change that names a control.
-  - `apply_changes` locks control steps and re-runs the control-path proof.
-  - The validator requires control steps to be performed by humans.
-  - A test replays event logs to confirm that every simulated case requiring a control
-    actually visited it.
-- **Not a security boundary.** The API is unauthenticated. Reviewer identity is self-asserted.
-  The ledger is tamper-evident only against casual edits.
+- **Contracts:** frozen Pydantic models and model digests. Service times are sampled by inverse
+  CDF.
+- **Validation:** references, probability sums, default routes, bounded loops, reachability of
+  completion, and control-path proofs.
+- **Random inputs:** counter-based, published with an arrival-stream digest.
+- **Engine:** one SimPy process per case, with open-work accounting at the horizon.
+- **Statistics:** metric definitions, t-intervals, and paired or Welch comparisons.
+
+### Decision analysis
+
+- **Levers:** typed and bounded. Enumeration collapses equivalent alternatives.
+- **Baselines:** the spreadsheet estimate and the uncapacitated simulation.
+- **Selection:** a decision rule and a Pareto front.
+- **Sensitivity:** one parameter at a time.
+- **Execution:** parallel replication jobs and the decision-study pipeline.
+
+## Core semantics
+
+- **Cases and resources.** Each case is a SimPy process. At each step it queues for a pooled
+  resource (non-preemptive, FIFO or value priority). It holds a server for an inverse-CDF
+  service time, then routes by first-match on its value, followed by a probabilistic branch.
+  Rework uses per-edge traversal limits with an explicit fallback.
+- **Horizon.** The run stops at the horizon. Unfinished cases stay *open*: queued, in service,
+  or in handoff. `arrivals = completed + open` is asserted in every run.
+- **Zero capacity.** A resource with zero capacity is a request that is never granted. Such a
+  model is accepted with a warning, and its cases stay open.
+- **Pairing.** Every draw is `BLAKE2b(scheme, seed, stream, case, step, visit)`, so draws don't
+  depend on event order. Pairing across scenarios is *verified* by arrival-stream digests, not
+  assumed from shared seeds.
+
+## Trust boundaries and control enforcement
+
+Controls are protected in depth, and every layer is tested:
+
+1. No lever type can address routing, controls, costs or demand.
+2. The critic rejects any proposed change that names a control or a control step.
+3. `apply_changes` locks control steps, then re-runs the control-path proof. The proof checks
+   every value region and every path for each applicable case type.
+4. The validator requires control steps to be performed by a **human** resource, so a control
+   cannot be automated.
+5. A test replays event logs and confirms that every simulated case requiring a control visited
+   it.
+
+The following are **not** security features: the API is unauthenticated, reviewer identity is
+self-asserted, and the ledger is tamper-evident only against casual edits. See
+[Assumptions and limitations](assumptions-and-limitations.md).

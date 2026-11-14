@@ -1,6 +1,6 @@
 # Decision study: Procurement exceptions
 
-Model `procurement-exceptions` v1.0.0 (digest `10a877ecc548dcd1`), generator `packs-v1`, exogenous scheme `blake2b-counter-v1`, profile `full`. 1880 simulated replications in 64.5 s.
+Model `procurement-exceptions` v1.0.0 (digest `10a877ecc548dcd1`), generator `packs-v1`, exogenous scheme `blake2b-counter-v1`, profile `full`. 1880 simulated replications in 64.6 s.
 
 Search split: seeds 1000–1009 (10), conditions ['normal']. Held-out split: seeds 9000–9019 (20), conditions ['normal', 'surge_25', 'receipt_heavy'].
 
@@ -74,4 +74,4 @@ Change in mean utilisation by resource when only the automation variant is switc
 - The capacity-aware selection is re-evaluated on held-out seeds and demand, but the alternative set and decision rule were authored with knowledge of the model.
 - Spreadsheet and uncapacitated choices are scored here by the capacity-aware simulation, which is itself only a model.
 
-Ledger record: `experiment-16c8254d6e50`
+Ledger record: `experiment-00fdcefe3fab`

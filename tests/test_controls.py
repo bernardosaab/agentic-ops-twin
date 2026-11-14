@@ -5,11 +5,7 @@ from __future__ import annotations
 import pytest
 from factories import controlled_flow
 
-from throughline.core.engine import simulate
-from throughline.core.model import OperatingModel
-from throughline.core.validate import validate
-from throughline.packs import PACK_IDS, get_pack
-from throughline.scenarios import (
+from agentic_ops_twin.decision.scenarios import (
     Change,
     ChangeRejected,
     ChangeSet,
@@ -18,6 +14,10 @@ from throughline.scenarios import (
     apply_changes,
     enumerate_alternatives,
 )
+from agentic_ops_twin.packs import PACK_IDS, get_pack
+from agentic_ops_twin.simulation.engine import simulate
+from agentic_ops_twin.simulation.model import OperatingModel
+from agentic_ops_twin.simulation.validate import validate
 
 
 def test_routing_that_bypasses_control_is_rejected() -> None:

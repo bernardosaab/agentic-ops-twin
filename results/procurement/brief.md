@@ -3,7 +3,7 @@
 **Status:** draft for named human review. Approval records a decision for discussion only; nothing is deployed.
 
 - Pack: `procurement`; model `procurement-exceptions` v1.0.0, digest `10a877ecc548dcd1`
-- Evidence: ledger record `experiment-16c8254d6e50`
+- Evidence: ledger record `experiment-00fdcefe3fab`
 - Narrative source: template-v1; grounding check: passed
 
 ## Summary
@@ -58,4 +58,4 @@ Under the `normal` condition, cost per case incl. SLA penalty is 117.19 [F2] ver
 - Parameters are synthetic and hand-authored; no real operational data was used or validated.
 - Approval of this brief records a decision for discussion only. Nothing is deployed and the prototype has no connection to live systems.
 
-Brief ledger record: `brief-3625323836c4`
+Brief ledger record: `brief-07f49f0e1aba`

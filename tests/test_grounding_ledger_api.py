@@ -8,13 +8,13 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from throughline.agent.brief import build_brief
-from throughline.agent.grounding import Fact, check_grounding
-from throughline.api import app
-from throughline.ledger import Ledger
-from throughline.packs import get_pack
-from throughline.scenarios import Change, ChangeSet
-from throughline.study import evaluate_change_set
+from agentic_ops_twin.api import app
+from agentic_ops_twin.decision.scenarios import Change, ChangeSet
+from agentic_ops_twin.decision.study import evaluate_change_set
+from agentic_ops_twin.governance.brief import build_brief
+from agentic_ops_twin.governance.grounding import Fact, check_grounding
+from agentic_ops_twin.governance.ledger import Ledger
+from agentic_ops_twin.packs import get_pack
 
 FACTS = [
     Fact(id="F1", source_record="r", path="a", value=12.3456, unit="hours", display="12.35"),

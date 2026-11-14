@@ -10,9 +10,9 @@ import pytest
 
 anthropic = pytest.importorskip("anthropic")
 
-from throughline.agent import anthropic_adapter as aa  # noqa: E402
-from throughline.agent.loop import run_proposal  # noqa: E402
-from throughline.packs import get_pack  # noqa: E402
+from agentic_ops_twin.agent import anthropic_adapter as aa  # noqa: E402
+from agentic_ops_twin.agent.loop import run_proposal  # noqa: E402
+from agentic_ops_twin.packs import get_pack  # noqa: E402
 
 
 class StubMessages:

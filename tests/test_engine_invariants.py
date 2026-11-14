@@ -7,11 +7,16 @@ import random
 import pytest
 from factories import single_queue
 
-from throughline.core.engine import HiddenMechanisms, simulate
-from throughline.core.exogenous import DemandCondition, arrival_stream, stream_digest, uniform
-from throughline.core.stats import compare, pairing_status
-from throughline.experiment import Job, Splits, run_jobs
-from throughline.packs import PACK_IDS, get_pack
+from agentic_ops_twin.decision.experiment import Job, Splits, run_jobs
+from agentic_ops_twin.packs import PACK_IDS, get_pack
+from agentic_ops_twin.simulation.engine import HiddenMechanisms, simulate
+from agentic_ops_twin.simulation.exogenous import (
+    DemandCondition,
+    arrival_stream,
+    stream_digest,
+    uniform,
+)
+from agentic_ops_twin.simulation.stats import compare, pairing_status
 
 
 @pytest.mark.parametrize("pid", PACK_IDS)

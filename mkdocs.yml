@@ -1,0 +1,59 @@
+site_name: Agentic Ops Twin
+site_description: Capacity-aware operating-model simulation with governed, agent-assisted scenario analysis.
+site_url: https://bernardosaab.github.io/agentic-ops-twin/
+repo_url: https://github.com/bernardosaab/agentic-ops-twin
+repo_name: bernardosaab/agentic-ops-twin
+edit_uri: edit/main/docs/
+copyright: MIT licensed. Synthetic data only; simulated results are conditional on stated assumptions.
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue grey
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue grey
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+nav:
+  - Overview: index.md
+  - Getting started: getting-started.md
+  - How it works: architecture.md
+  - Results: results.md
+  - Agent and governance: agent-and-governance.md
+  - Research:
+      - Pre-registration: preregistration.md
+      - Data, seeds and splits: data-and-splits.md
+  - Assumptions and limitations: assumptions-and-limitations.md
+  - Design decisions:
+      - Counter-based inputs: adr/0001-counter-based-exogenous-inputs.md
+      - State machine, not a framework: adr/0002-explicit-state-machine-not-agent-framework.md
+      - Enumeration, not a solver: adr/0003-bounded-enumeration-not-solver.md
